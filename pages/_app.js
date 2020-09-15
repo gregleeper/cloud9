@@ -1,0 +1,23 @@
+import "../styles/globals.css";
+import Amplify from "aws-amplify";
+import config from "../src/aws-exports";
+import { useContext } from "react";
+import CartContextProvider, { CartContext } from "../lib/cartContext";
+
+Amplify.configure(config);
+
+function MyApp({ Component, pageProps }) {
+  return (
+    <CartContextProvider>
+      <Component {...pageProps} />
+    </CartContextProvider>
+  );
+}
+
+export const useCart = () => {
+  const context = useContext(CartContext);
+
+  return context;
+};
+
+export default MyApp;

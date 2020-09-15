@@ -1,0 +1,257 @@
+import Layout from "../components/layout";
+import {
+  onCreateOrderItem,
+  onUpdateOrder,
+  onDeleteAddIn,
+} from "../src/graphql/subscriptions";
+import { API, graphqlOperation } from "aws-amplify";
+import { useEffect, useState } from "react";
+import {
+  listOrders,
+  ordersByStatusByCreatedAt,
+  ordersByStatusByPeriod,
+} from "../src/graphql/queries";
+
+import { updateOrder } from "../src/graphql/mutations";
+import Order from "../components/order";
+
+const Orders = () => {
+  const [orders, setOrders] = useState();
+  const [ordersInFullfillment, setOrdersInFullfillment] = useState();
+  const [
+    selectedPeriodForCreatedOrders,
+    setSelectedPeriodForCreatedOrders,
+  ] = useState(0);
+  const [
+    slectedPeriodForFullfillmentOrders,
+    setSlectedPeriodForFullfillmentOrders,
+  ] = useState(0);
+
+  useEffect(() => {
+    getFilteredOrdersInFullfillment();
+  }, [slectedPeriodForFullfillmentOrders]);
+
+  useEffect(() => {
+    getOrders(selectedPeriodForCreatedOrders);
+  }, [selectedPeriodForCreatedOrders]);
+
+  useEffect(() => {}, []);
+
+  const getOrders = async (period) => {
+    if (period == 0) {
+      getNewOrders();
+    } else getFilteredOrders(period);
+  };
+
+  const getFullfillmentOrders = async (period) => {
+    if (period == 0) {
+      getOrdersInFullfillment();
+    } else getFilteredOrdersInFullfillment(period);
+  };
+
+  const getNewOrders = async () => {
+    console.log("called");
+    const initialOrders = await API.graphql({
+      query: ordersByStatusByPeriod,
+      variables: {
+        status: "created",
+        sortDirection: "ASC",
+      },
+      authMode: "API_KEY",
+    });
+    setOrders(initialOrders.data.ordersByStatusByPeriod.items);
+  };
+
+  const getFilteredOrders = async (period) => {
+    const filteredOrders = await API.graphql({
+      query: ordersByStatusByPeriod,
+      variables: {
+        status: "created",
+        sortDirection: "ASC",
+        filter: { deliveryPeriod: { eq: period } },
+      },
+      authMode: "API_KEY",
+    });
+    setOrders(filteredOrders.data.ordersByStatusByPeriod.items);
+  };
+
+  const getOrdersInFullfillment = async () => {
+    const myOrders = await API.graphql({
+      query: ordersByStatusByPeriod,
+      variables: {
+        status: "In-Fullfillment",
+        sortDirection: "ASC",
+      },
+      authMode: "API_KEY",
+    });
+
+    if (myOrders.data.ordersByStatusByPeriod.items.length > 0) {
+      setOrdersInFullfillment(myOrders.data.ordersByStatusByPeriod.items);
+    }
+    if (myOrders.data.ordersByStatusByPeriod.items.length == 0) {
+      setOrdersInFullfillment([]);
+    }
+  };
+
+  const getFilteredOrdersInFullfillment = async (period) => {
+    const myOrders = await API.graphql({
+      query: ordersByStatusByPeriod,
+      variables: {
+        status: "In-Fullfillment",
+        sortDirection: "ASC",
+        filter: { deliveryPeriod: { eq: period } },
+      },
+      authMode: "API_KEY",
+    });
+
+    if (myOrders.data.ordersByStatusByPeriod.items.length > 0) {
+      setOrdersInFullfillment(myOrders.data.ordersByStatusByPeriod.items);
+    }
+  };
+
+  const updateOrderStatus = async (orderId, status) => {
+    console.log(orderId, status);
+    await API.graphql({
+      query: updateOrder,
+      variables: { input: { id: orderId, status } },
+      authMode: "API_KEY",
+    });
+  };
+
+  const orderStream = () =>
+    API.graphql({
+      query: onCreateOrderItem,
+      authMode: "API_KEY",
+    }).subscribe({
+      next: () => {
+        getNewOrders();
+      },
+    });
+
+  const orderUpdateStream = () => {
+    API.graphql({
+      query: onUpdateOrder,
+      authMode: "API_KEY",
+    }).subscribe({
+      next: () => {
+        getNewOrders();
+        getOrdersInFullfillment();
+      },
+    });
+  };
+
+  useEffect(() => {
+    getNewOrders();
+    getOrdersInFullfillment();
+    orderUpdateStream();
+    orderStream();
+  }, []);
+
+  useEffect(() => {}, [orders]);
+
+  useEffect(() => {}, [ordersInFullfillment]);
+
+  return (
+    <Layout>
+      <div>
+        <div className="relative w-1/2 mx-auto py-16 ">
+          <div className="bg-gold transform rotate-2 w-full m-auto h-16 absolute inset-0"></div>
+          <div className="bg-gray-700 w-full m-auto h-16 absolute inset-0 transform rotate-1"></div>
+
+          <h2 className="text-white text-5xl relative z-10 text-center leading-none text-shadow-lg font-display">
+            Orders
+          </h2>
+        </div>
+        <div className="md:flex justify-around items-start">
+          <div className="text-gray-900 lg:w-5/12 md:w-6/12 w-full mr-6">
+            <div>
+              <h6 className="text-xl">Created Orders</h6>
+            </div>
+            <div className="flex justify-start items-center">
+              <div className="pr-4">
+                <span>Filter Orders by Period:</span>
+              </div>
+              <div>
+                <select
+                  className="form-select"
+                  onChange={(e) =>
+                    setSelectedPeriodForCreatedOrders(e.target.value)
+                  }
+                >
+                  <option value={0}>All</option>
+                  <option value={2}>2nd Period</option>
+                  <option value={3}>3rd Period</option>
+                  <option value={4}>4th Period</option>
+                  <option value={5}>5th Period</option>
+                  <option value={6}>6th Period</option>
+                </select>
+              </div>
+            </div>
+            <div></div>
+            <ul>
+              {orders &&
+                orders.map((o) => (
+                  <div
+                    key={o.id}
+                    className="py-4 text-gray-900 border border-gray-500 bg-white bg-opacity-75 p-12 rounded shadow-sm my-4"
+                  >
+                    <Order
+                      order={o}
+                      handleUpdateOrderStatus={(id, status) =>
+                        updateOrderStatus(id, status)
+                      }
+                    />
+                  </div>
+                ))}
+            </ul>
+          </div>
+          <div className="py-12 md:py-0 lg:w-5/12 md:w-6/12 w-full ml-2">
+            <div>
+              <h6 className="text-gray-900 text-xl">Orders in Fullfillment</h6>
+            </div>
+            <div className="flex justify-start items-center">
+              <div className="pr-6">
+                <span>Filter Orders by Period:</span>
+              </div>
+              <div>
+                <select
+                  className="form-select"
+                  onChange={(e) =>
+                    setSlectedPeriodForFullfillmentOrders(e.target.value)
+                  }
+                >
+                  <option value={0}>All</option>
+                  <option value={2}>2nd Period</option>
+                  <option value={3}>3rd Period</option>
+                  <option value={4}>4th Period</option>
+                  <option value={5}>5th Period</option>
+                  <option value={6}>6th Period</option>
+                </select>
+              </div>
+            </div>
+            <div className="">
+              <ul>
+                {ordersInFullfillment &&
+                  ordersInFullfillment.map((o) => (
+                    <div
+                      key={o.id}
+                      className="py-4 text-gray-900 border border-gray-500 bg-white bg-opacity-75 p-12 rounded shadow-sm my-4"
+                    >
+                      <Order
+                        order={o}
+                        handleUpdateOrderStatus={(id, status) =>
+                          updateOrderStatus(id, status)
+                        }
+                      />
+                    </div>
+                  ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  );
+};
+
+export default Orders;

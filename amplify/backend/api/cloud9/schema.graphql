@@ -1,0 +1,177 @@
+type Item
+# @auth(
+#   rules: [
+#     {
+#       allow: groups
+#       groups: ["Managers"]
+#       operations: [read, create, update, delete]
+#     }
+#     { allow: groups, groups: ["Staff"], operations: [read], mutations: null }
+#     { allow: public, operations: [read] }
+#   ]
+# )
+@auth(
+  rules: [{ allow: public }, { allow: groups, groups: ["Managers", "Staff"] }]
+)
+@model {
+  id: ID!
+  name: String!
+  description: String
+  price: Float
+  categoryId: ID!
+  orders: [OrderItem] @connection(keyName: "byItem", fields: ["id"])
+  category: Category @connection(fields: ["categoryId"])
+}
+
+type Category
+@auth(
+  rules: [{ allow: public }, { allow: groups, groups: ["Managers", "Staff"] }]
+)
+# @auth(
+#   rules: [
+#     {
+#       allow: groups
+#       groups: ["Managers"]
+#       operations: [read, create, update, delete]
+#     }
+#     { allow: groups, groups: ["Staff"], operations: [read] }
+#     { allow: public, operations: [read] }
+#   ]
+# )
+@model {
+  id: ID!
+  name: String!
+  items: [Item] @connection(fields: ["id"])
+}
+
+type AddIn
+@model
+@auth(
+  rules: [{ allow: public }, { allow: groups, groups: ["Managers", "Staff"] }]
+) {
+  # @auth(
+  #   rules: [
+  #     {
+  #       allow: groups
+  #       groups: ["Managers"]
+  #       queries: [get, list]
+  #       mutations: [create, update, delete]
+  #     }
+  #     { allow: groups, groups: ["Staff"], queries: [get, list], mutations: null }
+  #   ]
+  # )
+  id: ID!
+  name: String!
+  description: String
+  category: Category @connection(fields: ["id"])
+  orderItems: [OrderItemAddIn] @connection(keyName: "byAddIn", fields: ["id"])
+}
+
+type Customer
+@model
+@auth(
+  rules: [{ allow: public }, { allow: groups, groups: ["Managers", "Staff"] }]
+)
+@key(
+  name: "customerByEmail"
+  fields: ["customerEmail"]
+  queryField: "getCustomerByEmail"
+) {
+  # @auth(
+  #   rules: [
+  #     {
+  #       allow: groups
+  #       groups: ["Managers"]
+  #       operations: [create, update, delete, read]
+  #     }
+  #   ]
+  # )
+  id: ID!
+  customerEmail: String!
+  username: String
+  orders: [Order] @connection(fields: ["id"])
+}
+
+type Order
+@model
+@auth(
+  rules: [{ allow: public }, { allow: groups, groups: ["Managers", "Staff"] }]
+)
+# @auth(
+#   rules: [
+#     {
+#       allow: groups
+#       groups: ["Mangers"]
+#       operations: [create, update, delete, read]
+#     }
+#     { allow: groups, groups: ["Staff"], operations: [read, create, update] }
+#   ]
+# )
+@key(
+  name: "ordersByStatus"
+  fields: ["status", "createdAt"]
+  queryField: "ordersByStatusByCreatedAt"
+)
+@key(
+  name: "ordersByStatusByPeriodByCustomerEmail"
+  fields: ["status", "deliveryPeriod", "createdAt"]
+  queryField: "ordersByStatusByPeriod"
+)
+@key(
+  name: "ordersByCustomerEmail"
+  fields: ["customerEmail", "createdAt"]
+  queryField: "ordersByCustomerEmail"
+)
+@key(name: "byCustomerByStatus", fields: ["customerEmail", "status"]) {
+  id: ID!
+  customerEmail: String!
+  items: [OrderItem] @connection(keyName: "byOrder", fields: ["id"])
+  status: String!
+  createdAt: String
+  total: Float!
+  deliveryPeriod: Int!
+  deliveryLocation: String!
+  changeRequired: Float!
+}
+
+type OrderItemAddIn
+@model
+@auth(
+  rules: [{ allow: public }, { allow: groups, groups: ["Managers", "Staff"] }]
+)
+@key(name: "byOrderItem", fields: ["orderItemId", "addInId"])
+@key(name: "byAddIn", fields: ["addInId", "orderItemId"]) {
+  id: ID!
+  orderItemId: ID!
+  addInId: ID!
+  quantity: Int!
+  orderItem: OrderItem! @connection(fields: ["orderItemId"])
+  addIn: AddIn! @connection(fields: ["addInId"])
+}
+
+type OrderItem
+@model
+@auth(
+  rules: [{ allow: public }, { allow: groups, groups: ["Managers", "Staff"] }]
+)
+@key(name: "byItem", fields: ["itemId", "orderId"])
+@key(name: "byOrder", fields: ["orderId", "itemId"]) {
+  # @auth(
+  #   rules: [
+  #     {
+  #       allow: groups
+  #       groups: ["Mangers"]
+  #       operations: [create, update, delete, read]
+  #     }
+  #     { allow: groups, groups: ["Staff"], operations: [read, create, update] }
+  #     { allow: public, operations: [read] }
+  #   ]
+  # )
+  id: ID!
+  itemId: ID!
+  orderId: ID!
+  quantity: Int!
+  item: Item! @connection(fields: ["itemId"])
+  order: Order! @connection(fields: ["orderId"])
+  addIns: [OrderItemAddIn] @connection(keyName: "byOrderItem", fields: ["id"])
+}
