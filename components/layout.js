@@ -11,7 +11,10 @@ const Layout = ({ children }) => {
         isManager={amplifyUser.state.isManager}
         isStaff={amplifyUser.state.isStaff}
       />
-      <div className="bg-food min-h-screen px-24"> {children}</div>
+      <div className="bg-food min-h-screen md:px-24 sm:px-10 px-4">
+        {" "}
+        {children}
+      </div>
     </div>
   );
 };

@@ -18,7 +18,7 @@ export default function Home() {
                 Instructions
               </h2>
             </div>
-            <div className="w-3/4">
+            <div className="sm:w-3/4 w-11/12">
               <p className="leading-relaxed py-4">
                 This app was created to help in the ordering and delivery
                 process of the Cloud 9 Coffee Shop at Hugoton High School.
