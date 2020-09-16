@@ -16,6 +16,7 @@ export const listItems = /* GraphQL */ `
         categoryId
         createdAt
         updatedAt
+        isAvailable
         category {
           id
           name
@@ -40,6 +41,7 @@ export const getItem = /* GraphQL */ `
       categoryId
       createdAt
       updatedAt
+      isAvailable
       category {
         id
         name
@@ -118,6 +120,7 @@ export const listAddIns = /* GraphQL */ `
         description
         createdAt
         updatedAt
+        isAvailable
         category {
           id
           name
@@ -140,6 +143,7 @@ export const getAddIn = /* GraphQL */ `
       description
       createdAt
       updatedAt
+      isAvailable
       category {
         id
         name

@@ -55,6 +55,7 @@ const CreateAddIn = () => {
             initialValues={{
               name: "",
               description: "",
+              isAvailable: "",
             }}
             onSubmit={async (values, actions) => {
               await API.graphql({
@@ -64,6 +65,7 @@ const CreateAddIn = () => {
                     name: values.name,
 
                     description: values.description,
+                    isAvailable: values.isAvailable,
                   },
                 },
                 authMode: "API_KEY",
@@ -96,7 +98,41 @@ const CreateAddIn = () => {
                       placeholder="Write a short description (optional)"
                     />
                   </div>
-
+                  <div
+                    className="flex justify-between md:w-8/12 w-full py-2"
+                    id="exact-change-group"
+                  >
+                    Is Available?
+                    <div
+                      className="flex justify-around items-center w-1/2"
+                      role="group"
+                      aria-labelledby="exact-change-group"
+                    >
+                      <div>
+                        <label className="mr-2">Yes</label>
+                        <Field
+                          className="form-radio"
+                          name="isAvailable"
+                          type="radio"
+                          value="True"
+                        />
+                      </div>
+                      <div>
+                        <label className="mr-2">No</label>
+                        <Field
+                          className="form-radio"
+                          name="isAvailable"
+                          type="radio"
+                          value="false"
+                        />
+                      </div>
+                      {/* {errors.isAvailable && touched.isAvailable ? (
+                        <div className="text-red-700 ml-4">
+                          {errors.isAvailable}
+                        </div>
+                      ) : null} */}
+                    </div>
+                  </div>
                   <div className="flex justify-center">
                     <button
                       className="border border-blue-400 bg-blue-500 text-white py-2 px-4 rounded-lg"

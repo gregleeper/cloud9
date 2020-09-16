@@ -46,6 +46,15 @@ const DropdownMenu = ({ username, isManager, isStaff }) => {
                     </Link>
                   </li>
                   <li className=" ">
+                    <Link href="/add-in/create">
+                      <a className=" text-md hover:text-white">
+                        <div className="flex items-center mt-2 mb-2 px-8 py-2 hover:bg-blue-800 hover:text-white bg-opacity-50 transition-colors duration-300 ease-linear">
+                          Add-Ins
+                        </div>
+                      </a>
+                    </Link>
+                  </li>
+                  <li className=" ">
                     <Link href="/category/create">
                       <a className=" text-md hover:text-white">
                         <div className="flex items-center mt-2 px-8 py-2 hover:bg-blue-800 hover:text-white bg-opacity-50 transition-colors duration-300 ease-linear mb-2">

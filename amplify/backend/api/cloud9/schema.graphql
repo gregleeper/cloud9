@@ -19,6 +19,7 @@ type Item
   description: String
   price: Float
   categoryId: ID!
+  isAvailable: String!
   orders: [OrderItem] @connection(keyName: "byItem", fields: ["id"])
   category: Category @connection(fields: ["categoryId"])
 }
@@ -63,6 +64,7 @@ type AddIn
   id: ID!
   name: String!
   description: String
+  isAvailable: String!
   category: Category @connection(fields: ["id"])
   orderItems: [OrderItemAddIn] @connection(keyName: "byAddIn", fields: ["id"])
 }

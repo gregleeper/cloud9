@@ -39,6 +39,7 @@ const EditItem = () => {
               name: (addIn && addIn.name) || "",
 
               description: (addIn && addIn.description) || "",
+              isAvailable: (addIn && addIn.isAvailable) || "",
             }}
             enableReinitialize
             onSubmit={async (values, actions) => {
@@ -48,7 +49,7 @@ const EditItem = () => {
                     name: values.name,
 
                     description: values.description,
-
+                    isAvailable: values.isAvailable,
                     id: addInId,
                   },
                 })
@@ -61,27 +62,61 @@ const EditItem = () => {
               <Form>
                 <div className="w-1/2 mx-auto">
                   <div className="flex justify-between items-center mb-4">
-                    <label className="text-gray-900" htmlFor="name">
+                    <label className="text-gray-900 w-1/4" htmlFor="name">
                       Name
                     </label>
                     <Field
-                      className="form-input"
+                      className="form-input w-full"
                       name="name"
                       placeholder="Item Name"
                     />
                   </div>
 
                   <div className="flex justify-between items-center mb-4">
-                    <label className="text-gray-900" name="description">
+                    <label className="text-gray-900 w-1/4" name="description">
                       Description
                     </label>
                     <Field
-                      className="form-input"
+                      className="form-input w-full"
                       name="description"
                       as="textarea"
                     />
                   </div>
-
+                  <div
+                    className="flex justify-between md:w-8/12 w-full py-2"
+                    id="exact-change-group"
+                  >
+                    Is Available?
+                    <div
+                      className="flex justify-around items-center w-full"
+                      role="group"
+                      aria-labelledby="exact-change-group"
+                    >
+                      <div className="">
+                        <label className="mr-2">Yes</label>
+                        <Field
+                          className="form-radio"
+                          name="isAvailable"
+                          type="radio"
+                          value="True"
+                        />
+                      </div>
+                      <div>
+                        <label className="mr-2">No</label>
+                        <Field
+                          className="form-radio"
+                          name="isAvailable"
+                          type="radio"
+                          value="false"
+                        />
+                      </div>
+                      {/* {errors.isAvailable && touched.isAvailable ? (
+                        <div className="text-red-700 ml-4">
+                          {errors.isAvailable}
+                        </div>
+                      ) : null} */}
+                    </div>
+                  </div>
                   <div className="flex justify-center">
                     <button
                       className="btn-submit mr-2 "

@@ -19,8 +19,13 @@ const Cart = () => {
   return (
     <Layout>
       <div>
-        <div className="mb-8">
-          <h1 className="text-3xl text-gray-800">Cart</h1>
+        <div className="relative w-full sm:w-8/12 md:w-7/12 lg:w-1/2 mx-auto py-24">
+          <div className="bg-gold transform rotate-2 w-full m-auto h-16 absolute inset-0"></div>
+          <div className="bg-gray-700 w-full m-auto h-16 absolute inset-0 transform rotate-1"></div>
+
+          <h2 className="text-white md:text-5xl sm:text-4xl text-3xl relative z-10 text-center leading-none text-shadow-lg font-display">
+            Cart
+          </h2>
         </div>
         <div>
           <div>
@@ -99,7 +104,7 @@ const Cart = () => {
             initialValues={{
               deliveryPeriod: "",
               deliveryLocation: "",
-              exactBool: null,
+              exactBool: "",
               changeRequired: 0,
             }}
             validationSchema={orderSchema}
@@ -208,12 +213,27 @@ const Cart = () => {
                   >
                     <div>
                       <label className="mr-2">Yes</label>
-                      <Field name="exactBool" type="radio" value="True" />
+                      <Field
+                        className="form-radio"
+                        name="exactBool"
+                        type="radio"
+                        value="True"
+                      />
                     </div>
                     <div>
                       <label className="mr-2">No</label>
-                      <Field name="exactBool" type="radio" value="false" />
+                      <Field
+                        className="form-radio"
+                        name="exactBool"
+                        type="radio"
+                        value="false"
+                      />
                     </div>
+                    {errors.exactBool && touched.exactBool ? (
+                      <div className="text-red-700 ml-4">
+                        {errors.exactBool}
+                      </div>
+                    ) : null}
                   </div>
                 </div>
                 {values.exactBool === "false" && (

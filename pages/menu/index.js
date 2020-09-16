@@ -124,6 +124,7 @@ const Menu = ({ items, addIns }) => {
                                             addIn: a,
                                           })
                                         }
+                                        disabled={a.isAvailable === "false"}
                                       >
                                         +
                                       </button>{" "}

@@ -69,6 +69,7 @@ const CreateItem = () => {
               price: 0,
               description: "",
               categoryId: "",
+              isAvailable: "",
             }}
             onSubmit={async (values, actions) => {
               await API.graphql({
@@ -79,6 +80,7 @@ const CreateItem = () => {
                     price: values.price,
                     description: values.description,
                     categoryId: values.categoryId,
+                    isAvailable: values.isAvailable,
                   },
                 },
                 authMode: "API_KEY",
@@ -137,6 +139,41 @@ const CreateItem = () => {
                           <option value={c.id}>{c.name}</option>
                         ))}
                     </Field>
+                  </div>
+                  <div
+                    className="flex justify-between md:w-8/12 w-full py-2"
+                    id="exact-change-group"
+                  >
+                    Is Available?
+                    <div
+                      className="flex justify-around items-center w-full"
+                      role="group"
+                      aria-labelledby="exact-change-group"
+                    >
+                      <div className="">
+                        <label className="mr-2">Yes</label>
+                        <Field
+                          className="form-radio"
+                          name="isAvailable"
+                          type="radio"
+                          value="True"
+                        />
+                      </div>
+                      <div>
+                        <label className="mr-2">No</label>
+                        <Field
+                          className="form-radio"
+                          name="isAvailable"
+                          type="radio"
+                          value="false"
+                        />
+                      </div>
+                      {/* {errors.isAvailable && touched.isAvailable ? (
+                        <div className="text-red-700 ml-4">
+                          {errors.isAvailable}
+                        </div>
+                      ) : null} */}
+                    </div>
                   </div>
                   <div className="flex justify-center">
                     <button
