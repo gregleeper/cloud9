@@ -51,7 +51,7 @@ const EditCategory = () => {
           >
             {({ isSubmitting }) => (
               <Form>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <label htmlFor="name">Category Name</label>
                   <Field
                     className="form-input w-10/12"

@@ -12,19 +12,19 @@ export default function Home() {
               Cloud 9 Coffee
             </h2>
           </div>
-          <div>
+          <div className="w-3/4 mx-auto">
             <div className="relative w-10/12 sm:w-8/12 md:w-7/12 lg:w-1/2  py-8">
-              <h2 className="text-gray-700 md:text-5xl sm:text-4xl text-3xl relative z-10 text-center leading-none text-shadow-lg font-display">
+              <h2 className="text-gray-700 md:text-5xl sm:text-4xl text-3xl relative z-10 leading-none text-shadow-lg font-display">
                 Instructions
               </h2>
             </div>
-            <div className="sm:w-3/4 w-11/12">
+            <div className="sm:w-3/4 w-11/12 pb-24">
               <p className="leading-relaxed py-4">
                 This app was created to help in the ordering and delivery
                 process of the Cloud 9 Coffee Shop at Hugoton High School.
                 Please use respectfully. Follow the instructions listed below:
               </p>
-              <ol className="list-decimal text-lg">
+              <ol className="list-decimal text-lg list-inside">
                 <li className="py-2">
                   Sign in with your school issued Google account. Any account
                   that is not of the usd210.org domain is not allowed to sign

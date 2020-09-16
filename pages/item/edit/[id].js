@@ -73,37 +73,41 @@ const EditItem = () => {
               <Form>
                 <div className="w-1/2 mx-auto">
                   <div className="flex justify-between items-center mb-4">
-                    <label className="text-gray-900" htmlFor="name">
+                    <label className="text-gray-900 w-1/4" htmlFor="name">
                       Name
                     </label>
                     <Field
-                      className="form-input"
+                      className="form-input w-full"
                       name="name"
                       placeholder="Item Name"
                     />
                   </div>
                   <div className="flex justify-between items-center mb-4">
-                    <label className="text-gray-900" htmlFor="price">
+                    <label className="text-gray-900 w-1/4" htmlFor="price">
                       Price
                     </label>
-                    <Field className="form-input" name="price" type="number" />
+                    <Field
+                      className="form-input w-full"
+                      name="price"
+                      type="number"
+                    />
                   </div>
                   <div className="flex justify-between items-center mb-4">
-                    <label className="text-gray-900" name="description">
+                    <label className="text-gray-900 w-1/4" name="description">
                       Description
                     </label>
                     <Field
-                      className="form-input"
+                      className="form-input w-full"
                       name="description"
                       as="textarea"
                     />
                   </div>
                   <div className="flex justify-between items-center mb-4">
-                    <label className="text-gray-900" name="categoryId">
+                    <label className="text-gray-900 w-1/4" name="categoryId">
                       Category
                     </label>
                     <Field
-                      className="form-select"
+                      className="form-select w-full"
                       name="categoryId"
                       as="select"
                       placeholder="Choose a category"
