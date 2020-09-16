@@ -49,7 +49,7 @@ const Nav = ({ user, isManager, isStaff }) => {
             </div>
           </div>
         ) : (
-          <div className="px-12 xl:w-2/12 lg:w-3/12 md:w-3/12 sm:w-4/12 w-5/12 ">
+          <div className="px-12 xl:w-2/12 lg:w-3/12 md:w-3/12 sm:w-4/12 w-7/12 ">
             <button
               className=" w-full border rounded-lg bg-white border-bluish-gray shadow py-1 px-2 transform hover:-translate-y-1 hover:scale-105"
               onClick={() => Auth.federatedSignIn({ provider: "Google" })}

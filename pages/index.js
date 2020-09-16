@@ -4,7 +4,7 @@ export default function Home() {
     <Layout>
       <div className="h-screen">
         <div>
-          <div className="relative w-10/12 sm:w-8/12 md:w-7/12 lg:w-1/2 mx-auto py-24">
+          <div className="relative w-full sm:w-8/12 md:w-7/12 lg:w-1/2 mx-auto py-24">
             <div className="bg-gold transform rotate-2 w-full m-auto h-16 absolute inset-0"></div>
             <div className="bg-gray-700 w-full m-auto h-16 absolute inset-0 transform rotate-1"></div>
 
@@ -14,10 +14,7 @@ export default function Home() {
           </div>
           <div>
             <div className="relative w-10/12 sm:w-8/12 md:w-7/12 lg:w-1/2  py-8">
-              <div className="bg-gold transform rotate-2 w-full m-auto h-16 absolute inset-0"></div>
-              <div className="bg-gray-700 w-full m-auto h-16 absolute inset-0 transform rotate-1"></div>
-
-              <h2 className="text-white md:text-5xl sm:text-4xl text-3xl relative z-10 text-center leading-none text-shadow-lg font-display">
+              <h2 className="text-gray-700 md:text-5xl sm:text-4xl text-3xl relative z-10 text-center leading-none text-shadow-lg font-display">
                 Instructions
               </h2>
             </div>
