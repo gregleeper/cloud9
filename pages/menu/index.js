@@ -71,8 +71,8 @@ const Menu = ({ items, addIns }) => {
                     className="py-4 w-9/12 text-gray-900 mx-auto border border-gray-400 shadow rounded-lg px-4 bg-light-gray "
                   >
                     <li>
-                      <div className="flex justify-between items-center">
-                        <div className="pb-2">
+                      <div className="flex justify-between items-center mb-2">
+                        <div className="">
                           <span className="text-lg">{i.name}</span>
                         </div>
                         <div>
