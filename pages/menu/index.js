@@ -117,7 +117,7 @@ const Menu = ({ items, addIns }) => {
                                     <>
                                       {" "}
                                       <button
-                                        className="border border-blue-500 py-1 px-2 rounded-md my-2"
+                                        className="border border-blue-500 py-1 px-2 rounded-md my-2 disabled:border-gray-300"
                                         onClick={() =>
                                           cart.addAddIn({
                                             itemId: i.id,

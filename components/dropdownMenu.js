@@ -2,11 +2,13 @@ import { useRef } from "react";
 import { useDetectOutsideClick } from "../lib/useDetectOutsideClick";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
+import { Auth } from "aws-amplify";
 
 const DropdownMenu = ({ username, isManager, isStaff }) => {
   const dropdownRef = useRef(null);
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
   const onClick = () => setIsActive(!isActive);
+  console.log(Auth);
 
   return (
     <div className=" container">
@@ -33,6 +35,11 @@ const DropdownMenu = ({ username, isManager, isStaff }) => {
                     </div>
                   </a>
                 </Link>
+              </li>
+              <li className=" ">
+                <div className="flex items-center mt-2 px-8 py-2 hover:bg-blue-800 hover:text-white bg-opacity-50 transition-colors duration-300 ease-linear mb-2">
+                  <button onClick={() => Auth.signOut()}>Sign Out</button>
+                </div>
               </li>
               {(isManager || isStaff) && (
                 <>
