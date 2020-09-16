@@ -36,15 +36,15 @@ a {
 }
 
 .btn-submit {
-  @apply border border-blue-500 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-400 hover:border-blue-400 disabled:opacity-50;
+  @apply border border-blue-500 bg-blue-500 text-white py-1 px-2 rounded-lg hover:bg-blue-400 hover:border-blue-400 disabled:opacity-50 w-20 sm:text-sm md:text-lg;
 }
 
 .btn-edit {
-  @apply border border-gray-600 bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-500;
+  @apply border border-gray-600 bg-gray-600 text-white py-1 px-2 rounded-lg hover:bg-gray-500 w-20 sm:text-sm md:text-lg;
 }
 
 .btn-delete {
-  @apply border border-red-600 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-500 disabled:opacity-50;
+  @apply border border-red-600 bg-red-600 text-white py-1 px-2 rounded-lg hover:bg-red-500 disabled:opacity-50 w-20 sm:text-sm md:text-lg;
 }
 
 .bg-papyrus {

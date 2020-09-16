@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { formatMoney } from "../../utils";
 import AddItem from "../../components/addItem";
 import { useCart } from "../_app";
+import { GrAddCircle } from "react-icons/gr";
+import { GoDiffAdded } from "react-icons/go";
 
 const Menu = ({ items, addIns }) => {
   const [menuItems, setMenuItems] = useState();
@@ -69,17 +71,19 @@ const Menu = ({ items, addIns }) => {
                     className="py-4 w-9/12 text-gray-900 mx-auto border border-gray-400 shadow rounded-lg px-4 bg-light-gray "
                   >
                     <li>
-                      <div>
-                        <span className="text-lg">{i.name}</span>
+                      <div className="flex justify-between items-center">
+                        <div className="pb-2">
+                          <span className="text-lg">{i.name}</span>
+                        </div>
+                        <div>
+                          <span>${formatMoney(i.price)}</span>
+                        </div>
                       </div>
-                      <div>
-                        <span>${formatMoney(i.price)}</span>
-                      </div>
-                      <div className="text-gray-600">
+                      <div className="text-gray-600 pb-3 mb-2">
                         <span>{i.description}</span>
                       </div>
                       {!isInCart(i.id) && (
-                        <div>
+                        <div className="">
                           <AddItem item={i} />
                         </div>
                       )}
@@ -112,24 +116,25 @@ const Menu = ({ items, addIns }) => {
                             {menuAddIns &&
                               menuAddIns.map((a) => (
                                 <div className="py-2">
-                                  <span>{a.name}: </span>
-                                  {!isInItem(i.id, a.id) && (
-                                    <>
-                                      {" "}
-                                      <button
-                                        className="border border-blue-500 py-1 px-2 rounded-md my-2 disabled:border-gray-300"
-                                        onClick={() =>
-                                          cart.addAddIn({
-                                            itemId: i.id,
-                                            addIn: a,
-                                          })
-                                        }
-                                        disabled={a.isAvailable === "false"}
-                                      >
-                                        +
-                                      </button>{" "}
-                                    </>
-                                  )}
+                                  <div className="flex justify-start items-center">
+                                    <span className="pr-4">{a.name}: </span>
+                                    {!isInItem(i.id, a.id) && (
+                                      <>
+                                        {" "}
+                                        <button
+                                          onClick={() =>
+                                            cart.addAddIn({
+                                              itemId: i.id,
+                                              addIn: a,
+                                            })
+                                          }
+                                          disabled={a.isAvailable === "false"}
+                                        >
+                                          <GoDiffAdded className="text-blue-600 text-2xl hover:text-blue-400" />
+                                        </button>{" "}
+                                      </>
+                                    )}
+                                  </div>
                                   {isInItem(i.id, a.id) && (
                                     <>
                                       <div className="">

@@ -6,10 +6,29 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Layout from "../../components/layout";
 import { formatMoney } from "../../utils";
+import Modal from "react-modal";
+
+const customModalStyles = {
+  top: "25%",
+  left: "25%",
+  right: "auto",
+  bottom: "auto",
+  marginRight: "-50%",
+  transform: "translate(-50%, -50%)",
+};
 
 const CreateItem = () => {
   const [items, setItems] = useState();
   const [categories, setCategories] = useState();
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
 
   const getCategories = async () => {
     const { data, loading, error } = await API.graphql({
@@ -58,8 +77,8 @@ const CreateItem = () => {
       <div>
         <h1 className="text-4xl text-gray-800 text-center">Items</h1>
       </div>
-      <div className="sm:flex justify-between">
-        <div className="mr-12">
+      <div className="lg:flex justify-between">
+        <div className="mx-6 lg:w-5/12 w-10/12">
           <div className="py-4">
             <h4 className="text-xl text-gray-900">Create an Item</h4>
           </div>
@@ -93,42 +112,56 @@ const CreateItem = () => {
               <Form>
                 <div className="w-full">
                   <div className="flex justify-between items-center mb-4">
-                    <label className="text-gray-900" htmlFor="name">
+                    <label
+                      className="text-gray-900 w-1/4 md:w-1/2"
+                      htmlFor="name"
+                    >
                       Name
                     </label>
                     <Field
-                      className="form-input"
+                      className="form-input w-full"
                       name="name"
                       placeholder="Item Name"
                     />
                   </div>
                   <div className="flex justify-between items-center mb-4">
-                    <label className="text-gray-900" htmlFor="price">
+                    <label
+                      className="text-gray-900 w-1/4 md:w-1/2"
+                      htmlFor="price"
+                    >
                       Price
                     </label>
 
                     <Field
-                      className="form-input"
+                      className="form-input w-full"
                       name="price"
                       type="number"
                       placeholder="1"
                     />
                   </div>
                   <div className="flex justify-between items-center mb-4 w-full">
-                    <label className="text-gray-900 pr-4" name="description">
+                    <label
+                      className="text-gray-900 w-1/4 md:w-1/2 pr-4"
+                      name="description"
+                    >
                       Description
                     </label>
                     <Field
-                      className="form-input"
+                      className="form-input w-full"
                       name="description"
                       as="textarea"
                       placeholder="Write a short description (optional)"
                     />
                   </div>
                   <div className="flex justify-between items-center mb-4">
-                    <label name="categoryId">Category</label>
+                    <label
+                      className="w-1/4 text-gray-900 md:w-1/2"
+                      htmlFor="categoryId"
+                    >
+                      Category
+                    </label>
                     <Field
-                      className="form-select"
+                      className="form-select w-full"
                       name="categoryId"
                       as="select"
                       placeholder="Choose a category"
@@ -141,17 +174,17 @@ const CreateItem = () => {
                     </Field>
                   </div>
                   <div
-                    className="flex justify-between md:w-8/12 w-full py-2"
+                    className="flex justify-between w-full py-2"
                     id="exact-change-group"
                   >
                     Is Available?
                     <div
-                      className="flex justify-around items-center w-full"
+                      className="flex justify-end items-center w-full"
                       role="group"
                       aria-labelledby="exact-change-group"
                     >
-                      <div className="">
-                        <label className="mr-2">Yes</label>
+                      <div className="mx-6 ">
+                        <label className="mr-1 ">Yes</label>
                         <Field
                           className="form-radio"
                           name="isAvailable"
@@ -160,7 +193,7 @@ const CreateItem = () => {
                         />
                       </div>
                       <div>
-                        <label className="mr-2">No</label>
+                        <label className="mr-1">No</label>
                         <Field
                           className="form-radio"
                           name="isAvailable"
@@ -190,34 +223,61 @@ const CreateItem = () => {
           </Formik>
         </div>
         <div className="mt-16 sm:mt-0 w-full">
-          <ul>
-            <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1">
-              {items &&
-                items.map((i) => (
-                  <div key={i.id} className="md:p-4 py-6 md:w-10/12 w-full">
-                    <li>
-                      <div className="mb-2">
-                        <p className="text-lg">{i.name}</p>
-                        <p className="text-md text-gray-700">{i.description}</p>
-                        <p className="text-md">${formatMoney(i.price)}</p>
-                      </div>
+          <div className="flex flex-wrap ">
+            {items &&
+              items.map((i) => (
+                <div
+                  key={i.id}
+                  className="md:p-4 py-6 lg:w-6/12 md:w-6/12 sm:w-6/12 w-7/12 xl:w-4/12 mx-auto "
+                >
+                  <div>
+                    <div className="mb-2">
+                      <p className="text-lg">{i.name}</p>
+                      <p className="text-md text-gray-700">{i.description}</p>
+                      <p className="text-md">${formatMoney(i.price)}</p>
+                    </div>
 
-                      <button
-                        className="btn-delete mr-2"
-                        onClick={() => handleDelete(i.id)}
-                      >
-                        Delete
-                      </button>
-                      <button className="btn-edit mr-2">
-                        <Link href="/item/edit[id]" as={`/item/edit/${i.id}`}>
-                          <a>Edit</a>
-                        </Link>
-                      </button>
-                    </li>
+                    <button className="btn-delete mr-2" onClick={openModal}>
+                      Delete
+                    </button>
+                    <Modal
+                      isOpen={modalIsOpen}
+                      onRequestClose={closeModal}
+                      style={customModalStyles}
+                      contentLabel="Delete Item Dialog"
+                    >
+                      <div className="flex h-48">
+                        <div className="m-auto">
+                          <div className="">
+                            <span>
+                              Are you sure you want to delete the item,{" "}
+                              {`${i.name}`}?
+                            </span>
+                          </div>
+                          <button
+                            className="btn-delete mr-2"
+                            onClick={() => handleDelete(i.id)}
+                          >
+                            Delete
+                          </button>
+                          <button
+                            className="border border-blue-600 text-blue-600 rounded-lg px-2 py-1"
+                            onClick={closeModal}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </Modal>
+                    <button className="btn-edit mr-2">
+                      <Link href="/item/edit[id]" as={`/item/edit/${i.id}`}>
+                        <a>Edit</a>
+                      </Link>
+                    </button>
                   </div>
-                ))}
-            </div>
-          </ul>
+                </div>
+              ))}
+          </div>
         </div>
       </div>
     </Layout>
