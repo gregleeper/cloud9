@@ -54,5 +54,5 @@
     "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
     "userPoolGroupList": [],
     "dependsOn": [],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://cloud9-nu.vercel.app/\",\"https://cloud9-nu.vercel.app/\",\"https://cloud9-nu.vercel.app/\"],\"LogoutURLs\":[\"http://localhost:3000/\",\"https://clou9-nu.vercel.app/\",\"https://cloud9-nu.vercel.app/\"]}"
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://cloud9-nu.vercel.app/\",\"https://cloud9-nu.vercel.app/\",\"https://cloud9-nu.vercel.app/\",\"http://localhost:3000/\"],\"LogoutURLs\":[\"http://localhost:3000/\",\"https://clou9-nu.vercel.app/\",\"https://cloud9-nu.vercel.app/\"]}"
 }

@@ -4,11 +4,10 @@ import Link from "next/link";
 import { FaUser } from "react-icons/fa";
 import { Auth } from "aws-amplify";
 
-const DropdownMenu = ({ username, isManager, isStaff }) => {
+const DropdownMenu = ({ user, isManager, isStaff }) => {
   const dropdownRef = useRef(null);
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
   const onClick = () => setIsActive(!isActive);
-  console.log(Auth);
 
   return (
     <div className=" container">
@@ -72,6 +71,13 @@ const DropdownMenu = ({ username, isManager, isStaff }) => {
                   </li>
                 </>
               )}
+              <li className=" ">
+                <div className="flex items-center mt-2 px-8 py-2  mb-2">
+                  <span className="text-sm text-gray-700">
+                    {user.attributes.email}
+                  </span>
+                </div>
+              </li>
             </ul>
           </nav>
         </div>

@@ -9,7 +9,7 @@ const Nav = ({ user, isManager, isStaff }) => {
   const { itemCount } = useCart();
 
   return (
-    <nav className="py-6 border-b-2 border-gray-800 shadow">
+    <nav className="py-6 border-b-2 border-gray-800 shadow text-sm md:text-lg">
       <div className="flex justify-between items-center">
         <ul className="flex justify-around w-8/12">
           <li className="nav-item">
@@ -32,8 +32,8 @@ const Nav = ({ user, isManager, isStaff }) => {
           )}
         </ul>
         {user ? (
-          <div className="flex justify-around mr-12">
-            <DropdownMenu isManager isStaff />
+          <div className="flex justify-around mr-12 z-20">
+            <DropdownMenu isManager isStaff user={user} />
 
             <div className="flex ml-4">
               <Link href="/cart">

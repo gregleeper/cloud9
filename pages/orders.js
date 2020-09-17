@@ -23,19 +23,17 @@ const Orders = () => {
     setSelectedPeriodForCreatedOrders,
   ] = useState(0);
   const [
-    slectedPeriodForFullfillmentOrders,
-    setSlectedPeriodForFullfillmentOrders,
+    selectedPeriodForFullfillmentOrders,
+    setSelectedPeriodForFullfillmentOrders,
   ] = useState(0);
 
   useEffect(() => {
-    getFilteredOrdersInFullfillment();
-  }, [slectedPeriodForFullfillmentOrders]);
+    getFullfillmentOrders(selectedPeriodForFullfillmentOrders);
+  }, [selectedPeriodForFullfillmentOrders]);
 
   useEffect(() => {
     getOrders(selectedPeriodForCreatedOrders);
   }, [selectedPeriodForCreatedOrders]);
-
-  useEffect(() => {}, []);
 
   const getOrders = async (period) => {
     if (period == 0) {
@@ -50,64 +48,127 @@ const Orders = () => {
   };
 
   const getNewOrders = async () => {
-    console.log("called");
-    const initialOrders = await API.graphql({
-      query: ordersByStatusByPeriod,
-      variables: {
-        status: "created",
-        sortDirection: "ASC",
-      },
-      authMode: "API_KEY",
-    });
-    setOrders(initialOrders.data.ordersByStatusByPeriod.items);
+    try {
+      const { data, loading, errors } = await API.graphql(
+        graphqlOperation(ordersByStatusByPeriod, {
+          status: "created",
+          sortDirection: "ASC",
+        })
+      );
+      setOrders(data.ordersByStatusByPeriod.items);
+    } catch (errors) {
+      console.log(errors);
+    }
   };
+
+  // const getNewOrders = async () => {
+  //   console.log("called");
+  //   const initialOrders = await API.graphql({
+  //     query: ordersByStatusByPeriod,
+  //     variables: {
+  //       status: "created",
+  //       sortDirection: "ASC",
+  //     },
+  //     authMode: "API_KEY",
+  //   });
+  //   setOrders(initialOrders.data.ordersByStatusByPeriod.items);
+  // };
 
   const getFilteredOrders = async (period) => {
-    const filteredOrders = await API.graphql({
-      query: ordersByStatusByPeriod,
-      variables: {
+    const { data, loading, errors } = await API.graphql(
+      graphqlOperation(ordersByStatusByPeriod, {
         status: "created",
         sortDirection: "ASC",
-        filter: { deliveryPeriod: { eq: period } },
-      },
-      authMode: "API_KEY",
-    });
-    setOrders(filteredOrders.data.ordersByStatusByPeriod.items);
+        filter: {
+          deliveryPeriod: {
+            eq: period,
+          },
+        },
+      })
+    );
+    if (errors) {
+      console.log(errors);
+    }
+    if (data) {
+      setOrders(data.ordersByStatusByPeriod.items);
+    }
   };
+
+  // const getFilteredOrders = async (period) => {
+  //   const filteredOrders = await API.graphql({
+  //     query: ordersByStatusByPeriod,
+  //     variables: {
+  //       status: "created",
+  //       sortDirection: "ASC",
+  //       filter: { deliveryPeriod: { eq: period } },
+  //     },
+  //     authMode: "API_KEY",
+  //   });
+  //   setOrders(filteredOrders.data.ordersByStatusByPeriod.items);
+  // };
 
   const getOrdersInFullfillment = async () => {
-    const myOrders = await API.graphql({
-      query: ordersByStatusByPeriod,
-      variables: {
-        status: "In-Fullfillment",
-        sortDirection: "ASC",
-      },
-      authMode: "API_KEY",
-    });
-
-    if (myOrders.data.ordersByStatusByPeriod.items.length > 0) {
-      setOrdersInFullfillment(myOrders.data.ordersByStatusByPeriod.items);
-    }
-    if (myOrders.data.ordersByStatusByPeriod.items.length == 0) {
-      setOrdersInFullfillment([]);
+    try {
+      const { data, loading, error } = await API.graphql(
+        graphqlOperation(ordersByStatusByPeriod, {
+          status: "In-Fullfillment",
+          sortDirection: "ASC",
+        })
+      );
+      console.log(error);
+      setOrdersInFullfillment(data.ordersByStatusByPeriod.items);
+    } catch (error) {
+      console.log(error);
     }
   };
 
+  // const getOrdersInFullfillment = async () => {
+  //   const myOrders = await API.graphql({
+  //     query: ordersByStatusByPeriod,
+  //     variables: {
+  //       status: "In-Fullfillment",
+  //       sortDirection: "ASC",
+  //     },
+  //     authMode: "API_KEY",
+  //   });
+
+  //   if (myOrders.data.ordersByStatusByPeriod.items.length > 0) {
+  //     setOrdersInFullfillment(myOrders.data.ordersByStatusByPeriod.items);
+  //   }
+  //   if (myOrders.data.ordersByStatusByPeriod.items.length == 0) {
+  //     setOrdersInFullfillment([]);
+  //   }
+  // };
+
   const getFilteredOrdersInFullfillment = async (period) => {
-    const myOrders = await API.graphql({
-      query: ordersByStatusByPeriod,
-      variables: {
+    const { data, loading, error } = await API.graphql(
+      graphqlOperation(ordersByStatusByPeriod, {
         status: "In-Fullfillment",
         sortDirection: "ASC",
         filter: { deliveryPeriod: { eq: period } },
-      },
-      authMode: "API_KEY",
-    });
+      })
+    );
 
-    if (myOrders.data.ordersByStatusByPeriod.items.length > 0) {
-      setOrdersInFullfillment(myOrders.data.ordersByStatusByPeriod.items);
+    if (data) {
+      setOrdersInFullfillment(data.ordersByStatusByPeriod.items);
     }
   };
+
+  // const getFilteredOrdersInFullfillment = async (period) => {
+  //   const myOrders = await API.graphql({
+  //     query: ordersByStatusByPeriod,
+  //     variables: {
+  //       status: "In-Fullfillment",
+  //       sortDirection: "ASC",
+  //       filter: { deliveryPeriod: { eq: period } },
+  //     },
+  //     authMode: "API_KEY",
+  //   });
+
+  //   if (myOrders.data.ordersByStatusByPeriod.items.length > 0) {
+  //     setOrdersInFullfillment(myOrders.data.ordersByStatusByPeriod.items);
+  //   }
+  // };
 
   const updateOrderStatus = async (orderId, status) => {
     console.log(orderId, status);
@@ -217,7 +278,7 @@ const Orders = () => {
                 <select
                   className="form-select"
                   onChange={(e) =>
-                    setSlectedPeriodForFullfillmentOrders(e.target.value)
+                    setSelectedPeriodForFullfillmentOrders(e.target.value)
                   }
                 >
                   <option value={0}>All</option>
