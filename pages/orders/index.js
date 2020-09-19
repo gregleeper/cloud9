@@ -1,19 +1,19 @@
-import Layout from "../components/layout";
+import Layout from "../../components/layout";
 import {
   onCreateOrderItem,
   onUpdateOrder,
   onDeleteAddIn,
-} from "../src/graphql/subscriptions";
+} from "../../src/graphql/subscriptions";
 import { API, graphqlOperation } from "aws-amplify";
 import { useEffect, useState } from "react";
 import {
   listOrders,
   ordersByStatusByCreatedAt,
   ordersByStatusByPeriod,
-} from "../src/graphql/queries";
+} from "../../src/graphql/queries";
 
-import { updateOrder } from "../src/graphql/mutations";
-import Order from "../components/order";
+import { updateOrder } from "../../src/graphql/mutations";
+import Order from "../../components/order";
 
 const Orders = () => {
   const [orders, setOrders] = useState();

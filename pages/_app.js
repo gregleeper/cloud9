@@ -1,4 +1,6 @@
 import "../styles/globals.css";
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 import Amplify from "aws-amplify";
 import config from "../src/aws-exports";
 import { useContext } from "react";

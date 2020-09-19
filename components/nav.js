@@ -9,9 +9,9 @@ const Nav = ({ user, isManager, isStaff }) => {
   const { itemCount } = useCart();
 
   return (
-    <nav className="py-6 border-b-2 border-gray-800 shadow text-sm md:text-lg">
+    <nav className="py-6 border-b-2 border-gray-800 shadow ">
       <div className="flex justify-between items-center">
-        <ul className="flex justify-around w-8/12">
+        <ul className="flex justify-around w-8/12 text-base md:text-lg">
           <li className="nav-item">
             <Link href="/">
               <a>Home</a>

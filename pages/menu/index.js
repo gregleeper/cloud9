@@ -54,7 +54,8 @@ const Menu = ({ items, addIns }) => {
     <Layout>
       <div className="">
         <div className="relative w-1/2 mx-auto py-16">
-          <div className="bg-gold transform rotate-2 w-full m-auto h-16 absolute inset-0"></div>
+          <div className="bg-gold transform rotate-6 w-full m-auto h-16 absolute inset-0"></div>
+
           <div className="bg-gray-700 w-full m-auto h-16 absolute inset-0 transform rotate-1"></div>
 
           <h2 className="text-white text-5xl relative z-10 text-center leading-none text-shadow-lg font-display">
