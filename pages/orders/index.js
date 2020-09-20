@@ -223,10 +223,13 @@ const Orders = () => {
             Orders
           </h2>
         </div>
+
         <div className="md:flex justify-around items-start">
           <div className="text-gray-900 lg:w-5/12 md:w-6/12 w-full mr-6">
-            <div>
-              <h6 className="text-xl">Created Orders</h6>
+            <div className="flex justify-between">
+              <div>
+                <h6 className="text-xl">Created Orders</h6>
+              </div>
             </div>
             <div className="flex justify-start items-center">
               <div className="pr-4">
