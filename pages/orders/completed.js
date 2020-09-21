@@ -72,7 +72,7 @@ const CompletedOrders = () => {
   useEffect(() => {
     getCompletedOrders();
   }, []);
-  console.log("completeddOrders: ", completedOrders);
+
   const getCompletedOrders = async () => {
     const { data, loading, errors } = await API.graphql(
       graphqlOperation(ordersByStatusByPeriod, {

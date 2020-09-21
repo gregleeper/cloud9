@@ -4,6 +4,7 @@ import {
   useFilters,
   useGlobalFilter,
   useAsyncDebounce,
+  usePagination,
 } from "react-table";
 import { IoMdArrowDropdownCircle, IoMdArrowDropupCircle } from "react-icons/io";
 
@@ -91,11 +92,19 @@ function Table({ columns, data }) {
     getTableProps,
     getTableBodyProps,
     headers,
-    state,
+    state: { pageIndex, pageSize, globalFilter },
     preGlobalFilteredRows,
     setGlobalFilter,
-    rows,
     prepareRow,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
   } = useTable(
     {
       columns,
@@ -112,21 +121,22 @@ function Table({ columns, data }) {
     },
     useFilters,
     useGlobalFilter,
-    useSortBy
+    useSortBy,
+    usePagination
   );
 
   return (
-    <>
+    <div className="pb-16">
       <div>
         <GlobalFilter
           preGlobalFilteredRows={preGlobalFilteredRows}
-          globalFilter={state.globalFilter}
+          globalFilter={globalFilter}
           setGlobalFilter={setGlobalFilter}
         />
       </div>
       <table
         {...getTableProps()}
-        className="bg-gray-100 text-gray-900 border shadow p-4 mt-8 w-full text-sm"
+        className="bg-gray-100 text-gray-900 border shadow mt-8 w-full text-sm pb-16"
       >
         <thead className=" border-b-2 border-gray-400 ">
           {headers.map((column) => (
@@ -134,10 +144,10 @@ function Table({ columns, data }) {
               className="px-4 py-2 "
               {...column.getHeaderProps(column.getSortByToggleProps())}
             >
-              <div className="flex justify-center items-center">
+              <div className="flex justify-center items-center text-sm">
                 {column.render("Header")}
                 <div>
-                  <span className="text-lg text-gray-700 ">
+                  <span className="lg:text-lg text-base text-gray-700 ">
                     {column.isSorted ? (
                       column.isSortedDesc ? (
                         <IoMdArrowDropdownCircle />
@@ -155,9 +165,9 @@ function Table({ columns, data }) {
           ))}
         </thead>
         <tbody className="" {...getTableBodyProps()}>
-          {rows.map((row, i) => {
+          {page.map((row, i) => {
             prepareRow(row);
-            console.log(row);
+
             return (
               <tr className="border-b border-gray-400" {...row.getRowProps()}>
                 {row.cells.map((cell) => {
@@ -172,7 +182,69 @@ function Table({ columns, data }) {
           })}
         </tbody>
       </table>
-    </>
+      <div className="py-6">
+        <button
+          className="border-gray-500 border px-2 py-1 bg-gray-200 text-gray-800 disabled:opacity-50"
+          onClick={() => gotoPage(0)}
+          disabled={!canPreviousPage}
+        >
+          {"<<"}
+        </button>{" "}
+        <button
+          className="border-gray-500 border px-2 py-1 bg-gray-200 text-gray-800 disabled:opacity-50"
+          onClick={() => previousPage()}
+          disabled={!canPreviousPage}
+        >
+          {"<"}
+        </button>{" "}
+        <button
+          className="border-gray-500 border px-2 py-1 bg-gray-200 text-gray-800 disabled:opacity-50"
+          onClick={() => nextPage()}
+          disabled={!canNextPage}
+        >
+          {">"}
+        </button>{" "}
+        <button
+          className="border-gray-500 border px-2 py-1 bg-gray-200 text-gray-800 disabled:opacity-50"
+          onClick={() => gotoPage(pageCount - 1)}
+          disabled={!canNextPage}
+        >
+          {">>"}
+        </button>{" "}
+        <span>
+          Page{" "}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>{" "}
+        </span>
+        <span>
+          | Go to page:{" "}
+          <input
+            className="form-input"
+            type="number"
+            defaultValue={pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              gotoPage(page);
+            }}
+            style={{ width: "100px" }}
+          />
+        </span>{" "}
+        <select
+          className="form-select"
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+          }}
+        >
+          {[10, 20, 30, 40, 50].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
   );
 }
 
