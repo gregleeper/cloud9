@@ -1,15 +1,36 @@
-import Layout from "../../components/layout";
+import { useState, useEffect } from "react";
+import Table from "../components/table";
+import Layout from "../components/layout";
+import { ordersByCustomerEmail } from "../src/graphql/queries";
 import { API, graphqlOperation } from "aws-amplify";
-import { ordersByStatusByPeriod } from "../../src/graphql/queries";
-import { useEffect, useState, useMemo } from "react";
-import Table, { GlobalFilter } from "../../components/table";
-import { formatMoney } from "../../utils";
-import { FaBinoculars } from "react-icons/fa";
-import Link from "next/link";
+import useAmplifyAuth from "../lib/useAmplifyAuth";
 import moment from "moment";
+import { formatMoney } from "../utils";
+import Link from "next/link";
+import { FaBinoculars } from "react-icons/fa";
 
-const CompletedOrders = () => {
-  const [completedOrders, setCompletedOrders] = useState([]);
+const MyOrders = () => {
+  const [customerOrders, setCustomerOrders] = useState([]);
+  const auth = useAmplifyAuth();
+
+  const getCustomerOrders = async (userEmail) => {
+    const myOrders = await API.graphql(
+      graphqlOperation(ordersByCustomerEmail, {
+        customerEmail: userEmail,
+        sortDirection: "ASC",
+      })
+    );
+    setCustomerOrders(myOrders.data.ordersByCustomerEmail.items);
+  };
+
+  useEffect(() => {
+    if (!auth.state.isLoading && !auth.state.isError) {
+      const userEmail = auth.state.user.attributes.email;
+      getCustomerOrders(userEmail);
+    }
+  }, [auth.state.isLoading]);
+
+  console.log(customerOrders);
 
   const columns = React.useMemo(
     () => [
@@ -69,39 +90,18 @@ const CompletedOrders = () => {
     []
   );
 
-  useEffect(() => {
-    getCompletedOrders();
-  }, []);
-
-  const getCompletedOrders = async () => {
-    const { data, loading, errors } = await API.graphql(
-      graphqlOperation(ordersByStatusByPeriod, {
-        status: "Completed",
-        sortDirection: "ASC",
-      })
-    );
-    if (errors) {
-      console.log(errors);
-    }
-    console.log(data);
-    if (data) {
-      setCompletedOrders(data.ordersByStatusByPeriod.items);
-    }
-  };
-
   return (
     <Layout>
       <div>
-        <div className="text-2xl text-gray-800 text-center py-6">
-          <h1>Completed Orders</h1>
-        </div>
-
         <div>
-          <Table columns={columns} data={completedOrders} />
+          <h1 className="text-2xl text-gray-800 text-center py-6">My Orders</h1>
+        </div>
+        <div>
+          <Table columns={columns} data={customerOrders} />
         </div>
       </div>
     </Layout>
   );
 };
 
-export default CompletedOrders;
+export default MyOrders;

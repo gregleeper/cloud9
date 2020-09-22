@@ -27,7 +27,7 @@ const DropdownMenu = ({ user, isManager, isStaff }) => {
           >
             <ul className=" divide-y divide-gray-400 mt-2">
               <li className=" hover:bg-blue-800 hover:text-white bg-opacity-50 transition-colors duration-300 ease-linear">
-                <Link href="/profile">
+                <Link href="/my-orders">
                   <a className=" text-md">
                     <div className="flex items-center mt-2 mb-2 px-8 py-2 hover:bg-blue-800 hover:text-white bg-opacity-50 transition-colors duration-300 ease-linear">
                       My Orders

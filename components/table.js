@@ -136,7 +136,7 @@ function Table({ columns, data }) {
       </div>
       <table
         {...getTableProps()}
-        className="bg-gray-100 text-gray-900 border shadow mt-8 w-full text-sm pb-16"
+        className="bg-white text-gray-900 border shadow mt-8 w-full text-sm pb-16"
       >
         <thead className=" border-b-2 border-gray-400 ">
           {headers.map((column) => (

@@ -281,6 +281,20 @@ export const getOrder = /* GraphQL */ `
       items {
         items {
           id
+          quantity
+          item {
+            name
+            description
+          }
+          addIns {
+            items {
+              id
+              quantity
+              addIn {
+                name
+              }
+            }
+          }
           itemId
           orderId
           quantity
@@ -415,6 +429,23 @@ export const ordersByCustomerEmail = /* GraphQL */ `
         changeRequired
         updatedAt
         items {
+          items {
+            id
+            item {
+              name
+              price
+            }
+            addIns {
+              items {
+                id
+                quantity
+                addIn {
+                  id
+                  name
+                }
+              }
+            }
+          }
           nextToken
         }
       }
