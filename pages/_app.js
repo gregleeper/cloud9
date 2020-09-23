@@ -6,7 +6,7 @@ import config from "../src/aws-exports";
 import { useContext } from "react";
 import CartContextProvider, { CartContext } from "../lib/cartContext";
 
-Amplify.configure(config);
+Amplify.configure({ ...config, ssr: true });
 
 function MyApp({ Component, pageProps }) {
   return (

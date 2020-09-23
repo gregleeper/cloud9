@@ -4,7 +4,7 @@ import {
   onUpdateOrder,
   onDeleteAddIn,
 } from "../../src/graphql/subscriptions";
-import { API, graphqlOperation } from "aws-amplify";
+import { API, graphqlOperation, withSSRContext } from "aws-amplify";
 import { useEffect, useState } from "react";
 import {
   listOrders,
@@ -15,7 +15,8 @@ import {
 import { updateOrder } from "../../src/graphql/mutations";
 import Order from "../../components/order";
 
-const Orders = () => {
+const Orders = ({ authenticated, isManager, isStaff }) => {
+  console.log(isManager);
   const [orders, setOrders] = useState();
   const [ordersInFullfillment, setOrdersInFullfillment] = useState();
   const [
@@ -317,5 +318,36 @@ const Orders = () => {
     </Layout>
   );
 };
+
+export async function getServerSideProps(context) {
+  const ssr = withSSRContext(context);
+
+  const { signInUserSession } = await ssr.Auth.currentAuthenticatedUser();
+
+  const isManager = signInUserSession.accessToken.payload[
+    "cognito:groups"
+  ].includes("Managers");
+
+  const isStaff = signInUserSession.accessToken.payload[
+    "cognito:groups"
+  ].includes("Managers");
+
+  try {
+    await ssr.Auth.currentAuthenticatedUser();
+    return {
+      props: {
+        authenticated: true,
+        isManager,
+        isStaff,
+      },
+    };
+  } catch (err) {
+    return {
+      props: {
+        authenticated: false,
+      },
+    };
+  }
+}
 
 export default Orders;
