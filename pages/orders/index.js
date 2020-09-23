@@ -17,6 +17,7 @@ import Order from "../../components/order";
 
 const Orders = ({ authenticated, isManager, isStaff }) => {
   console.log(isStaff);
+  // test
   const [orders, setOrders] = useState();
   const [ordersInFullfillment, setOrdersInFullfillment] = useState();
   const [
