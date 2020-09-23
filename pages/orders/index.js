@@ -16,9 +16,6 @@ import { updateOrder } from "../../src/graphql/mutations";
 import Order from "../../components/order";
 
 const Orders = ({ authenticated, isManager, isStaff }) => {
-  console.log(isManager);
-
-  // testing ssr-protected-routes
   const [orders, setOrders] = useState();
   const [ordersInFullfillment, setOrdersInFullfillment] = useState();
   const [
@@ -323,31 +320,37 @@ const Orders = ({ authenticated, isManager, isStaff }) => {
 
 export async function getServerSideProps(context) {
   const ssr = withSSRContext(context);
-
-  const { signInUserSession } = await ssr.Auth.currentAuthenticatedUser();
-
-  const isManager = signInUserSession.accessToken.payload[
-    "cognito:groups"
-  ].includes("Managers");
-
-  const isStaff = signInUserSession.accessToken.payload[
-    "cognito:groups"
-  ].includes("Managers");
-
   try {
-    await ssr.Auth.currentAuthenticatedUser();
-    return {
-      props: {
-        authenticated: true,
-        isManager,
-        isStaff,
-      },
-    };
+    let isManager = false;
+    let isStaff = false;
+    const { signInUserSession } = await ssr.Auth.currentAuthenticatedUser();
+    isManager = signInUserSession.accessToken.payload[
+      "cognito:groups"
+    ].includes("Managers");
+
+    isStaff = signInUserSession.accessToken.payload["cognito:groups"].includes(
+      "Staff"
+    );
+    if (isManager || isStaff) {
+      return {
+        props: {
+          authenticated: true,
+          isManager,
+          isStaff,
+        },
+      };
+    } else {
+      context.res.writeHead(302, { location: "/" });
+      context.res.end();
+      return {
+        props: {},
+      };
+    }
   } catch (err) {
+    context.res.writeHead(302, { location: "/" });
+    context.res.end();
     return {
-      props: {
-        authenticated: false,
-      },
+      props: {},
     };
   }
 }
