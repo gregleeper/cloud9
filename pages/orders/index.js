@@ -16,7 +16,7 @@ import { updateOrder } from "../../src/graphql/mutations";
 import Order from "../../components/order";
 
 const Orders = ({ authenticated, isManager, isStaff }) => {
-  console.log(isManager);
+  console.log(isStaff);
   const [orders, setOrders] = useState();
   const [ordersInFullfillment, setOrdersInFullfillment] = useState();
   const [
