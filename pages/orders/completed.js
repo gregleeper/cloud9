@@ -1,5 +1,5 @@
 import Layout from "../../components/layout";
-import { API, graphqlOperation } from "aws-amplify";
+import { API, graphqlOperation, withSSRContext } from "aws-amplify";
 import { ordersByStatusByPeriod } from "../../src/graphql/queries";
 import { useEffect, useState, useMemo } from "react";
 import Table, { GlobalFilter } from "../../components/table";
@@ -103,5 +103,42 @@ const CompletedOrders = () => {
     </Layout>
   );
 };
+
+export async function getServerSideProps(context) {
+  const ssr = withSSRContext(context);
+  try {
+    let isManager = false;
+    let isStaff = false;
+    const { signInUserSession } = await ssr.Auth.currentAuthenticatedUser();
+    isManager = signInUserSession.accessToken.payload[
+      "cognito:groups"
+    ].includes("Managers");
+
+    isStaff = signInUserSession.accessToken.payload["cognito:groups"].includes(
+      "Staff"
+    );
+    if (isManager || isStaff) {
+      return {
+        props: {
+          authenticated: true,
+          isManager,
+          isStaff,
+        },
+      };
+    } else {
+      context.res.writeHead(302, { location: "/" });
+      context.res.end();
+      return {
+        props: {},
+      };
+    }
+  } catch (err) {
+    context.res.writeHead(302, { location: "/" });
+    context.res.end();
+    return {
+      props: {},
+    };
+  }
+}
 
 export default CompletedOrders;
