@@ -17,6 +17,8 @@ import Order from "../../components/order";
 
 const Orders = ({ authenticated, isManager, isStaff }) => {
   console.log(isManager);
+
+  // testing ssr-protected-routes
   const [orders, setOrders] = useState();
   const [ordersInFullfillment, setOrdersInFullfillment] = useState();
   const [
