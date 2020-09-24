@@ -6,7 +6,7 @@ const AddItem = ({ item }) => {
   return (
     <div>
       <button
-        className="px-4 py-1 text-xl bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+        className="px-4 py-1 text-xl bg-gold text-white rounded-lg hover:bg-opacity-75 border-gray-400 border shadow"
         onClick={() => cart.addProduct(item)}
       >
         <MdAddShoppingCart />

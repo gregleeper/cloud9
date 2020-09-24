@@ -185,8 +185,10 @@ const CreateAddIn = () => {
                 >
                   <div className="border border-gray-500 rounded-md hover:shadow-lg bg-white px-6 py-6 min-h-full">
                     <div className="mb-2 h-30">
-                      <p className="text-lg">{i.name}</p>
-                      <p className="text-sm text-gray-700">{i.description}</p>
+                      <p className="text-lg font-title">{i.name}</p>
+                      <p className="text-sm text-gray-700 my-2">
+                        {i.description}
+                      </p>
                     </div>
                     <div className="flex justify-between">
                       <button
