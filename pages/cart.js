@@ -34,10 +34,10 @@ const Cart = () => {
                 cart.cartItems.map((i) => (
                   <div
                     key={i.id}
-                    className="text-gray-900 text-md mb-6 w-4/12 flex justify-between"
+                    className="text-gray-900 text-md mb-6 w-full lg:w-8/12 flex justify-between bg-white border-gray-400 border shadow p-4"
                   >
                     <li>
-                      <span className="text-lg mr-8 ">{i.name}</span>
+                      <span className="text-lg mr-8 font-title ">{i.name}</span>
                       <span>${formatMoney(i.price)}</span>
 
                       <div className="">
@@ -77,7 +77,7 @@ const Cart = () => {
                           <div>
                             {i.addIns.map((addIn) => (
                               <div>
-                                <span>{addIn.name}</span>
+                                <span className="font-title">{addIn.name}</span>
                                 <span> x {addIn.quantity}</span>
                               </div>
                             ))}
@@ -169,7 +169,7 @@ const Cart = () => {
           >
             {({ isSubmitting, errors, touched, values }) => (
               <Form>
-                <div className="flex justify-between md:w-8/12 w-full py-2">
+                <div className="flex justify-between lg:w-8/12 w-full py-2">
                   <label htmlFor="deliveryPeriod">Delivery Period</label>
                   <Field
                     className="form-select w-full ml-4"
@@ -188,7 +188,7 @@ const Cart = () => {
                     </div>
                   ) : null}
                 </div>
-                <div className="flex justify-between md:w-8/12 w-full py-2">
+                <div className="flex justify-between lg:w-8/12 w-full py-2">
                   <label>Delivery Location</label>
                   <Field
                     className="form-input w-full ml-4"
@@ -201,7 +201,7 @@ const Cart = () => {
                   ) : null}
                 </div>
                 <div
-                  className="flex justify-between md:w-8/12 w-full py-2"
+                  className="flex justify-between lg:w-8/12 w-full py-2"
                   id="exact-change-group"
                 >
                   Do you have exact change?
@@ -236,7 +236,7 @@ const Cart = () => {
                   </div>
                 </div>
                 {values.exactBool === "false" && (
-                  <div className="flex justify-between md:w-8/12 w-full py-2">
+                  <div className="flex justify-between lg:w-8/12 w-full py-2">
                     <label>
                       Please input dollar amount you're paying with:
                     </label>
