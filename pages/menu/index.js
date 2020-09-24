@@ -62,7 +62,7 @@ const Menu = ({ items, addIns }) => {
             Menu
           </h2>
         </div>
-        <div className="w-11/12 mx-auto">
+        <div className="w-11/12 mx-auto pb-24">
           <ul>
             <div className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-4">
               {menuItems &&
