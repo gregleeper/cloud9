@@ -11,6 +11,7 @@ module.exports = {
   theme: {
     fontFamily: {
       display: ["Seaweed Script"],
+      title: ["Titillium Web"],
     },
     extend: {
       colors: {

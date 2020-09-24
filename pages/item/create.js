@@ -2,6 +2,7 @@ import { API, graphqlOperation, withSSRContext } from "aws-amplify";
 import { listItems, listCategorys } from "../../src/graphql/queries";
 import { createItem, deleteItem } from "../../src/graphql/mutations";
 import { Formik, Form, Field } from "formik";
+import { FaTrash, FaPencilAlt } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Layout from "../../components/layout";
@@ -75,7 +76,9 @@ const CreateItem = () => {
   return (
     <Layout>
       <div>
-        <h1 className="text-4xl text-gray-800 text-center">Items</h1>
+        <h1 className="text-5xl text-gray-800 text-center font-display py-4">
+          Items
+        </h1>
       </div>
       <div className="lg:flex justify-between">
         <div className="mx-6 lg:w-5/12 w-10/12">
@@ -230,50 +233,58 @@ const CreateItem = () => {
                   key={i.id}
                   className="md:p-4 py-6 lg:w-6/12 md:w-6/12 sm:w-6/12 w-7/12 xl:w-4/12 mx-auto "
                 >
-                  <div>
-                    <div className="mb-2">
-                      <p className="text-lg">{i.name}</p>
-                      <p className="text-md text-gray-700">{i.description}</p>
-                      <p className="text-md">${formatMoney(i.price)}</p>
+                  <div className="border border-gray-500 rounded-md hover:shadow-lg bg-white px-6 py-6 min-h-full">
+                    <div className="mb-2 h-30">
+                      <p className="text-lg font-title">{i.name}</p>
+                      <p className="text-sm text-gray-700 mt-2">
+                        {i.description}
+                      </p>
+                      <p className="text-sm mt-2">${formatMoney(i.price)}</p>
                     </div>
-
-                    <button className="btn-delete mr-2" onClick={openModal}>
-                      Delete
-                    </button>
-                    <Modal
-                      isOpen={modalIsOpen}
-                      onRequestClose={closeModal}
-                      style={customModalStyles}
-                      contentLabel="Delete Item Dialog"
-                    >
-                      <div className="flex h-48">
-                        <div className="m-auto">
-                          <div className="">
-                            <span>
-                              Are you sure you want to delete the item,{" "}
-                              {`${i.name}`}?
-                            </span>
+                    <div className="flex justify-between">
+                      <button
+                        className="text-red-700 transform hover:scale-x-105 hover:scale-y-105 text-2xl"
+                        onClick={openModal}
+                      >
+                        <FaTrash />
+                      </button>
+                      <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={closeModal}
+                        style={customModalStyles}
+                        contentLabel="Delete Item Dialog"
+                      >
+                        <div className="flex h-48">
+                          <div className="m-auto">
+                            <div className="">
+                              <span>
+                                Are you sure you want to delete the item,{" "}
+                                {`${i.name}`}?
+                              </span>
+                            </div>
+                            <button
+                              className="btn-delete mr-2"
+                              onClick={() => handleDelete(i.id)}
+                            >
+                              Delete
+                            </button>
+                            <button
+                              className="border border-blue-600 text-blue-600 rounded-lg px-2 py-1"
+                              onClick={closeModal}
+                            >
+                              Cancel
+                            </button>
                           </div>
-                          <button
-                            className="btn-delete mr-2"
-                            onClick={() => handleDelete(i.id)}
-                          >
-                            Delete
-                          </button>
-                          <button
-                            className="border border-blue-600 text-blue-600 rounded-lg px-2 py-1"
-                            onClick={closeModal}
-                          >
-                            Cancel
-                          </button>
                         </div>
-                      </div>
-                    </Modal>
-                    <button className="btn-edit mr-2">
-                      <Link href="/item/edit[id]" as={`/item/edit/${i.id}`}>
-                        <a>Edit</a>
-                      </Link>
-                    </button>
+                      </Modal>
+                      <button className="text-blue-700 text-2xl transform hover:scale-x-105 hover:scale-y-105">
+                        <Link href="/item/edit[id]" as={`/item/edit/${i.id}`}>
+                          <a>
+                            <FaPencilAlt />
+                          </a>
+                        </Link>
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}

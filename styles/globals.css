@@ -5,12 +5,19 @@
 @tailwind utilities;
 
 @import url("https://fonts.googleapis.com/css2?family=Seaweed+Script&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Titillium+Web:wght@200&display=swap");
 
 @layer base {
   @font-face {
     font-family: Seaweed Script;
     font-weight: 400;
     src: url("https://fonts.googleapis.com/css2?family=Seaweed+Script&display=swap");
+  }
+
+  @font-face {
+    font-family: "Titillium Web", sans-serif;
+    font-weight: 200;
+    src: url("https://fonts.googleapis.com/css2?family=Titillium+Web:wght@200&display=swap");
   }
 }
 
