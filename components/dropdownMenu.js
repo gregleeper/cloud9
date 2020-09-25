@@ -18,7 +18,7 @@ const DropdownMenu = ({ user, isManager, isStaff }) => {
         >
           <FaUser />
         </button>
-        <div className="">
+        <div className=" mt-2">
           <nav
             ref={dropdownRef}
             className={`w-64 -ml-24  absolute border ${
