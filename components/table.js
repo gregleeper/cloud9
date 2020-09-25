@@ -102,6 +102,8 @@ function Table({ columns, data }) {
     pageOptions,
     pageCount,
     gotoPage,
+    footerGroups,
+
     nextPage,
     previousPage,
     setPageSize,
@@ -169,7 +171,10 @@ function Table({ columns, data }) {
             prepareRow(row);
 
             return (
-              <tr className="border-b border-gray-400" {...row.getRowProps()}>
+              <tr
+                className="border-t first:border-t-0 last:border-t-0 border-gray-400"
+                {...row.getRowProps()}
+              >
                 {row.cells.map((cell) => {
                   return (
                     <td className="py-5 px-4" {...cell.getCellProps()}>
@@ -181,6 +186,15 @@ function Table({ columns, data }) {
             );
           })}
         </tbody>
+        <tfoot>
+          {footerGroups.map((group) => (
+            <tr {...group.getFooterGroupProps()}>
+              {group.headers.map((column) => (
+                <td {...column.getFooterProps()}>{column.render("Footer")}</td>
+              ))}
+            </tr>
+          ))}
+        </tfoot>
       </table>
       <div className="py-6">
         <button

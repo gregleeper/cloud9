@@ -40,6 +40,24 @@ const CompletedOrders = () => {
           </div>
         ),
         disableFilters: true,
+        Footer: (info) => {
+          const orderTotal = useMemo(
+            () => info.rows.reduce((sum, row) => row.values.total + sum, 0),
+            [info.rows]
+          );
+          return (
+            <div className="py-2 text-center flex justify-around items-center border-t-4 border-gray-900">
+              <div>
+                <span className="text-gray-600">Total:</span>{" "}
+              </div>
+              <div>
+                <span className="text-lg font-bold">
+                  ${formatMoney(orderTotal)}
+                </span>
+              </div>
+            </div>
+          );
+        },
       },
       {
         Header: "Delivery Period",
