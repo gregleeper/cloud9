@@ -67,7 +67,11 @@ const EditItem = () => {
                   },
                 })
               );
-
+              fetch(
+                "https://api.vercel.com/v1/integrations/deploy/QmY58qnSQ83vP7HrtRXVbWkKn1HjcJ9XLRsKkSko54jsqV/FkR9L18skN"
+              )
+                .then((res) => res.json())
+                .then((data) => data);
               router.back();
             }}
           >

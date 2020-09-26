@@ -71,6 +71,13 @@ const CreateItem = () => {
       const filteredItems = items.filter((i) => i.id !== id);
       setItems(filteredItems);
     }
+    fetch(
+      "https://api.vercel.com/v1/integrations/deploy/QmY58qnSQ83vP7HrtRXVbWkKn1HjcJ9XLRsKkSko54jsqV/FkR9L18skN"
+    )
+      .then((res) => res.json())
+      .then((data) => data);
+
+    closeModal();
   };
 
   return (
@@ -108,6 +115,11 @@ const CreateItem = () => {
                 authMode: "API_KEY",
               });
               getItems();
+              fetch(
+                "https://api.vercel.com/v1/integrations/deploy/QmY58qnSQ83vP7HrtRXVbWkKn1HjcJ9XLRsKkSko54jsqV/FkR9L18skN"
+              )
+                .then((res) => res.json())
+                .then((data) => data);
               actions.resetForm({});
             }}
           >

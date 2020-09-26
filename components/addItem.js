@@ -2,7 +2,7 @@ import { useCart } from "../pages/_app";
 import { MdAddShoppingCart } from "react-icons/md";
 const AddItem = ({ item }) => {
   const cart = useCart();
-  console.log(cart);
+
   return (
     <div>
       <button

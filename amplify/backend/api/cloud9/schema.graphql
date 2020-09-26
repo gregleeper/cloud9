@@ -13,6 +13,11 @@ type Item
 @auth(
   rules: [{ allow: public }, { allow: groups, groups: ["Managers", "Staff"] }]
 )
+@key(
+  name: "itemsByCategory"
+  fields: ["categoryId"]
+  queryField: "itemsByCategoryByCreatedAt"
+)
 @model {
   id: ID!
   name: String!
