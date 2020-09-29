@@ -118,6 +118,10 @@ function Table({ columns, data }) {
             id: "createdAt",
             desc: true,
           },
+          {
+            id: "totalSold",
+            desc: true,
+          },
         ],
       },
     },
@@ -149,7 +153,7 @@ function Table({ columns, data }) {
               <div className="flex justify-center items-center text-sm">
                 {column.render("Header")}
                 <div>
-                  <span className="lg:text-lg text-base text-gray-700 ">
+                  <span className="lg:text-xl text-base text-gray-700 ">
                     {column.isSorted ? (
                       column.isSortedDesc ? (
                         <IoMdArrowDropdownCircle />

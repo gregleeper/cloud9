@@ -24,6 +24,12 @@ export const listItems = /* GraphQL */ `
           updatedAt
         }
         orders {
+          items {
+            id
+            quantity
+            orderId
+            itemId
+          }
           nextToken
         }
       }
@@ -259,6 +265,28 @@ export const listOrders = /* GraphQL */ `
         changeRequired
         updatedAt
         items {
+          items {
+            id
+            quantity
+            item {
+              name
+              description
+            }
+            addIns {
+              items {
+                id
+                quantity
+                addIn {
+                  name
+                }
+              }
+            }
+            itemId
+            orderId
+            quantity
+            createdAt
+            updatedAt
+          }
           nextToken
         }
       }
@@ -567,17 +595,7 @@ export const listOrderItems = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        order {
-          id
-          customerEmail
-          status
-          createdAt
-          total
-          deliveryPeriod
-          deliveryLocation
-          changeRequired
-          updatedAt
-        }
+
         addIns {
           nextToken
         }

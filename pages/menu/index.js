@@ -101,8 +101,10 @@ const Menu = ({ items, addIns, categories }) => {
   useEffect(() => {
     if (items) {
       const sortedItems = items.data.listItems.items.sort(compare);
-
-      setMenuItems(sortedItems);
+      const sortedItemsAvailable = sortedItems.filter(
+        (item) => item.isAvailable === "True"
+      );
+      setMenuItems(sortedItemsAvailable);
     }
     if (addIns) {
       setMenuAddIns(addIns.data.listAddIns.items);
