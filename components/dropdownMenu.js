@@ -78,6 +78,15 @@ const DropdownMenu = ({ user, isManager, isStaff }) => {
                       </a>
                     </Link>
                   </li>
+                  <li>
+                    <Link href="/orders/summarized">
+                      <a>
+                        <div className="flex items-center mt-2 px-8 py-2 hover:bg-blue-800 hover:text-white bg-opacity-50 transition-colors duration-300 ease-linear mb-2">
+                          Item Popularity
+                        </div>
+                      </a>
+                    </Link>
+                  </li>
                 </>
               )}
               <li className=" ">

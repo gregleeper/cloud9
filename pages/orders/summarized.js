@@ -28,7 +28,7 @@ const CompletedOrders = () => {
         totalSold: quantitySoldPerItem,
       });
     });
-    console.log(totals);
+
     setItemSummary(totals);
   };
 
@@ -116,7 +116,7 @@ const CompletedOrders = () => {
             <h1>Popularity per Item</h1>
           </div>
         </div>
-        <button onClick={() => populateItemSummary()}>click</button>
+
         <div>
           <Table columns={columns} data={itemSummary} />
         </div>
