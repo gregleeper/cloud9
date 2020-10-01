@@ -169,7 +169,13 @@ const CompletedOrders = () => {
             {!beginDate && <p>Choose a day:</p>}
             <DayPickerInput
               value={beginDate}
-              onDayChange={(day) => setBeginDate(day)}
+              onDayChange={(day) => {
+                const date = moment(day);
+
+                date.subtract(11, "hours");
+
+                setBeginDate(date._d);
+              }}
               formatDate={formatDate}
               parseDate={parseDate}
               placeholder={`${formatDate(new Date())}`}
