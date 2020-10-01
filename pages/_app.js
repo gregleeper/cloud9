@@ -5,6 +5,7 @@ import Amplify from "aws-amplify";
 import config from "../src/aws-exports";
 import { useContext } from "react";
 import CartContextProvider, { CartContext } from "../lib/cartContext";
+import "react-day-picker/lib/style.css";
 
 Amplify.configure({ ...config, ssr: true });
 

@@ -1,7 +1,13 @@
 import Layout from "../../components/layout";
 import { API, graphqlOperation, withSSRContext } from "aws-amplify";
+import DayPickerInput from "react-day-picker/DayPickerInput";
+import MomentLocaleUtils, {
+  formatDate,
+  parseDate,
+} from "react-day-picker/moment";
+import "moment/locale/it";
 import { ordersByStatusByPeriod } from "../../src/graphql/queries";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import Table, { GlobalFilter } from "../../components/table";
 import { formatMoney } from "../../utils";
 import { FaBinoculars } from "react-icons/fa";
@@ -10,6 +16,9 @@ import moment from "moment";
 
 const CompletedOrders = () => {
   const [completedOrders, setCompletedOrders] = useState([]);
+  const [beginDate, setBeginDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const modifiers = { start: beginDate, end: endDate };
 
   const columns = React.useMemo(
     () => [
@@ -27,7 +36,7 @@ const CompletedOrders = () => {
         accessor: "createdAt",
         Cell: ({ value }) => (
           <div className="text-center">
-            <span>{moment(value).format("MMM-DD  h:mm a")}</span>
+            <span>{moment(value).format("MM/DD/YY  h:mm a")}</span>
           </div>
         ),
       },
@@ -91,11 +100,52 @@ const CompletedOrders = () => {
     getCompletedOrders();
   }, []);
 
+  useEffect(() => {
+    if (beginDate && endDate) {
+      getCompletedOrdersByDateRange();
+    }
+    if (!beginDate && !endDate) {
+      getCompletedOrders();
+    }
+  }, [beginDate, endDate]);
+
+  const inputEl = useRef(null);
+  const onBeginDateClick = () => {
+    inputEl.current;
+  };
+
+  const resetDateFilters = () => {
+    setBeginDate();
+    setEndDate();
+  };
+  console.log(beginDate);
+
   const getCompletedOrders = async () => {
     const { data, loading, errors } = await API.graphql(
       graphqlOperation(ordersByStatusByPeriod, {
         status: "Completed",
         sortDirection: "ASC",
+      })
+    );
+    if (errors) {
+      console.log(errors);
+    }
+    console.log(data);
+    if (data) {
+      setCompletedOrders(data.ordersByStatusByPeriod.items);
+    }
+  };
+
+  const getCompletedOrdersByDateRange = async () => {
+    const { data, loading, errors } = await API.graphql(
+      graphqlOperation(ordersByStatusByPeriod, {
+        status: "Completed",
+        sortDirection: "ASC",
+        filter: {
+          createdAt: {
+            between: [beginDate, endDate],
+          },
+        },
       })
     );
     if (errors) {
@@ -113,7 +163,58 @@ const CompletedOrders = () => {
         <div className="text-2xl text-gray-800 text-center py-6">
           <h1>Completed Orders</h1>
         </div>
+        <div className="flex justify-center items-center">
+          <div className="mr-4">
+            {beginDate && <p>Begin Date: {beginDate.toLocaleDateString()}</p>}
+            {!beginDate && <p>Choose a day:</p>}
+            <DayPickerInput
+              value={beginDate}
+              onDayChange={(day) => setBeginDate(day)}
+              formatDate={formatDate}
+              parseDate={parseDate}
+              placeholder={`${formatDate(new Date())}`}
+              dayPickerProps={{
+                selectedDays: [beginDate, { beginDate, endDate }],
+                disabledDays: { after: endDate },
+                toMonth: endDate,
+                modifiers,
+                numberOfMonths: 1,
+                onDayClick: () => onBeginDateClick(),
+              }}
+            />
+          </div>
+          <div>
+            {endDate && (
+              <p>End Date: {`${moment(endDate).format("MM/DD/YYYY")}`}</p>
+            )}
+            {!endDate && <p>Choose a day:</p>}
+            <DayPickerInput
+              ref={inputEl}
+              value={endDate}
+              onDayChange={(day) => {
+                const date = moment(day);
 
+                date.add(11, "hours");
+
+                setEndDate(date._d);
+              }}
+              formatDate={formatDate}
+              parseDate={parseDate}
+              placeholder={`${formatDate(new Date())}`}
+              dayPickerProps={{
+                selectedDays: [beginDate, { beginDate, endDate }],
+                disabledDays: { before: beginDate },
+                modifiers,
+                month: beginDate,
+                fromMonth: beginDate,
+                numberOfMonths: 1,
+              }}
+            />
+          </div>
+          <div>
+            <button onClick={() => resetDateFilters()}>Clear Dates</button>
+          </div>
+        </div>
         <div>
           <Table columns={columns} data={completedOrders} />
         </div>

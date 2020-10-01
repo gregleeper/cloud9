@@ -270,13 +270,15 @@ const CreateItem = () => {
                           <div className="m-auto">
                             <div className="">
                               <span>
-                                Are you sure you want to delete the item,{" "}
+                                Deletion of items is disabled for now. Please
+                                edit the item so that it is no longer available.
                                 {`${i.name}`}?
                               </span>
                             </div>
                             <button
                               className="btn-delete mr-2"
                               onClick={() => handleDelete(i.id)}
+                              disabled={true}
                             >
                               Delete
                             </button>

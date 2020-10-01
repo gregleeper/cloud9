@@ -211,14 +211,17 @@ const CreateAddIn = () => {
                         <div className="flex h-48">
                           <div className="m-auto">
                             <div className="">
+                              <h6>{`${i.name}`}</h6>
                               <span>
-                                Are you sure you want to delete the item,{" "}
-                                {`${i.name}`}?
+                                Deletion of add-ins are disabled for now. Please
+                                edit the add-in so that it is no longer
+                                available.
                               </span>
                             </div>
                             <button
                               className="btn-delete mr-2"
                               onClick={() => handleDelete(i.id)}
+                              disabled={true}
                             >
                               Delete
                             </button>
