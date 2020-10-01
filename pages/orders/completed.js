@@ -136,6 +136,20 @@ const CompletedOrders = () => {
     }
   };
 
+  const handleBeginDayChange = (selectedDay, modifiers, dayPickerInput) => {
+    const input = dayPickerInput.getInput();
+    const date = moment(selectedDay);
+    date.subtract(11, "hours");
+    setBeginDate(selectedDay);
+  };
+  const handleEndDayChange = (selectedDay, modifiers, dayPickerInput) => {
+    const input = dayPickerInput.getInput();
+    const date = moment(selectedDay);
+    date.add(11, "hours");
+
+    setEndDate(date._d);
+  };
+
   const getCompletedOrdersByDateRange = async () => {
     const { data, loading, errors } = await API.graphql(
       graphqlOperation(ordersByStatusByPeriod, {
@@ -163,19 +177,12 @@ const CompletedOrders = () => {
         <div className="text-2xl text-gray-800 text-center py-6">
           <h1>Completed Orders</h1>
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-end">
           <div className="mr-4">
-            {beginDate && <p>Begin Date: {beginDate.toLocaleDateString()}</p>}
-            {!beginDate && <p>Choose a day:</p>}
+            <p>Choose a begin date:</p>
             <DayPickerInput
               value={beginDate}
-              onDayChange={(day) => {
-                const date = moment(day);
-
-                date.subtract(11, "hours");
-
-                setBeginDate(date._d);
-              }}
+              onDayChange={handleBeginDayChange}
               formatDate={formatDate}
               parseDate={parseDate}
               placeholder={`${formatDate(new Date())}`}
@@ -184,16 +191,14 @@ const CompletedOrders = () => {
                 disabledDays: { after: endDate },
                 toMonth: endDate,
                 modifiers,
-                numberOfMonths: 1,
+                numberOfMonths: 2,
                 onDayClick: () => onBeginDateClick(),
               }}
             />
           </div>
           <div>
-            {endDate && (
-              <p>End Date: {`${moment(endDate).format("MM/DD/YYYY")}`}</p>
-            )}
-            {!endDate && <p>Choose a day:</p>}
+            <p>Choose an End Date:</p>
+
             <DayPickerInput
               ref={inputEl}
               value={endDate}
@@ -213,12 +218,17 @@ const CompletedOrders = () => {
                 modifiers,
                 month: beginDate,
                 fromMonth: beginDate,
-                numberOfMonths: 1,
+                numberOfMonths: 2,
               }}
             />
           </div>
           <div>
-            <button onClick={() => resetDateFilters()}>Clear Dates</button>
+            <button
+              className="ml-4 border border-gray-300 bg-gray-200 shadow px-2 py-1 hover:bg-blue-500 hover:text-white"
+              onClick={() => resetDateFilters()}
+            >
+              Clear Dates
+            </button>
           </div>
         </div>
         <div>
