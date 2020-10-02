@@ -224,7 +224,7 @@ const CompletedOrders = () => {
           </div>
           <div>
             <button
-              className="ml-4 border border-gray-300 bg-gray-200 shadow px-2 py-1 hover:bg-blue-500 hover:text-white"
+              className="ml-4 border border-gray-300 bg-gray-200 shadow px-2 py-1 hover:bg-gold hover:text-gray-900 text-shadow-lg"
               onClick={() => resetDateFilters()}
             >
               Clear Dates
