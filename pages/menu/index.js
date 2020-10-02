@@ -339,6 +339,7 @@ export async function getStaticProps({ preview = null }) {
       categories,
       preview,
     },
+    revalidate: 1,
   };
 }
 
