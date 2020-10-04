@@ -2,11 +2,11 @@ const { urlObjectKeys } = require("next/dist/next-server/lib/utils");
 
 module.exports = {
   purge: [
-    "./pages/**/*.js",
-    "./pages/*.js",
-    "./pages/**/**/*.js",
-    "./lib/*.js",
-    "./components/*.js",
+    "./pages/**/*.{js,jsx,ts,tsx}",
+    "./pages/*.{js,jsx,ts,tsx}",
+    "./pages/**/**/*.{js,jsx,ts,tsx}",
+    "./lib/*.{js,jsx,ts,tsx}",
+    "./components/*.{js,jsx,ts,tsx}",
   ],
   theme: {
     fontFamily: {
