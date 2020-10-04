@@ -45,12 +45,12 @@ const MenuAddIn = ({
   };
 
   return (
-    <div className="py-3 w-2/5  px-1 mx-2 mb-2 ">
-      <div className="block hover:text-blue-800 hover:bold">
+    <div className="py-3 px-1 mx-2 mb-2 w-2/5">
+      <div className="block hover:text-blue-800">
         <div>
           <span className="lg:text-base text-sm font-title">{name}</span>
         </div>
-        <div className="text-gray-600 hover:text-blue-800 text-xs">
+        <div className="text-gray-600 text-xs hover:text-blue-800">
           <span>{description}</span>
         </div>
         {!isInItem(itemId, addInId) && (
