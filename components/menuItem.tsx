@@ -13,6 +13,13 @@ type MenuItemProps = {
   menuAddIns: Array<object>;
 };
 
+interface MenuAddIn {
+  id: string;
+  name: string;
+  description: string;
+  isAvailable: string;
+}
+
 const MenuItem = ({
   name,
   description,
@@ -84,7 +91,7 @@ const MenuItem = ({
               </div>
               <div className="flex flex-wrap">
                 {menuAddIns &&
-                  menuAddIns.map((a: object) => (
+                  menuAddIns.map((a: MenuAddIn) => (
                     <MenuAddIn
                       name={a.name}
                       description={a.description}
