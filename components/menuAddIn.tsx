@@ -19,7 +19,7 @@ const MenuAddIn = ({
   addInId,
 }: AddInProps) => {
   const cart = useCart();
-  console.log(cart);
+
   const isInItem = (itemId, addInId) => {
     const itemIndex = cart.cartItems.findIndex((item) => item.id === itemId);
     return cart.cartItems[itemIndex].addIns.some((i) => i.id === addInId);
