@@ -240,19 +240,26 @@ const Cart = () => {
                     <label>
                       Please input dollar amount you're paying with:
                     </label>
-                    <Field
+                    {/* <Field
                       className="form-input w-full"
                       name="payAmount"
                       type="number"
                       as="input"
-                    />
+                    /> */}
+                    <p className="px-2 py-6 bg-red-200 text-gray-900 text-lg">
+                      We do not have change at the moment. You will not be able
+                      to complete an order without having exact change.
+                    </p>
                   </div>
                 )}
 
                 <button
                   className="btn-submit mt-4"
                   disabled={
-                    !state.user || cart.cartItems.length === 0 || isSubmitting
+                    !state.user ||
+                    cart.cartItems.length === 0 ||
+                    isSubmitting ||
+                    values.exactBool === "false"
                   }
                   type="submit"
                 >
