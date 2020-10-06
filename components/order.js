@@ -35,8 +35,13 @@ const Order = ({ order, handleUpdateOrderStatus }) => {
   return (
     <div>
       <li>
-        <div>
+        <div className="flex justify-between items-center">
           <span className="text-xl">{order.customerEmail}</span>
+          {order.hasLoyaltyCard ? (
+            <div className="px-2 py-2 bg-green-300 rounded-lg">
+              <span>Loyalty Card</span>
+            </div>
+          ) : null}
         </div>
         <div className="ml-2 py-1">
           <div>

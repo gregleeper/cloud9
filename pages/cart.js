@@ -6,9 +6,10 @@ import {
   createOrder,
   createOrderItem,
   createOrderItemAddIn,
+  createCustomer,
 } from "../src/graphql/mutations";
-import { getOrder } from "../src/graphql/queries";
-import { API, graphqlOperation } from "aws-amplify";
+import { getCustomerByEmail } from "../src/graphql/queries";
+import { API } from "aws-amplify";
 import { Formik, Field, Form } from "formik";
 import { orderSchema } from "../lib/orderSchema";
 
@@ -111,17 +112,46 @@ const Cart = () => {
             enableReinitialize
             onSubmit={async (values, actions) => {
               const customerEmail = state.user.attributes.email;
+              let loyaltyCard = false;
+
               if (values.exactBool === "false") {
                 values.changeRequired = values.payAmount - cart.total;
               }
 
               try {
+                const customer = await API.graphql({
+                  query: getCustomerByEmail,
+                  variables: {
+                    customerEmail,
+                  },
+                  authMode: "API_KEY",
+                });
+
+                if (customer.data.getCustomerByEmail.items == 0) {
+                  const createdCustomer = await API.graphql({
+                    query: createCustomer,
+                    variables: {
+                      input: {
+                        customerEmail,
+                        hasLoyaltyCard: loyaltyCard,
+                      },
+                    },
+                    authMode: "API_KEY",
+                  });
+                }
+
+                if (customer.data.getCustomerByEmail.items[0].hasLoyaltyCard) {
+                  console.log(customer);
+                  loyaltyCard = true;
+                }
+
                 const order = await API.graphql({
                   query: createOrder,
                   variables: {
                     input: {
                       customerEmail,
                       status: "created",
+                      hasLoyaltyCard: loyaltyCard,
                       total: cart.total,
                       deliveryPeriod: values.deliveryPeriod,
                       deliveryLocation: values.deliveryLocation,

@@ -1,6 +1,3 @@
-/* eslint-disable */
-// this is an auto generated file. This will be overwritten
-
 export const listItems = /* GraphQL */ `
   query ListItems(
     $filter: ModelItemFilterInput
@@ -24,12 +21,6 @@ export const listItems = /* GraphQL */ `
           updatedAt
         }
         orders {
-          items {
-            id
-            quantity
-            orderId
-            itemId
-          }
           nextToken
         }
       }
@@ -178,6 +169,7 @@ export const getCustomer = /* GraphQL */ `
       id
       customerEmail
       username
+      hasLoyaltyCard
       createdAt
       updatedAt
       orders {
@@ -207,6 +199,7 @@ export const listCustomers = /* GraphQL */ `
       items {
         id
         customerEmail
+        hasLoyaltyCard
         username
         createdAt
         updatedAt
@@ -236,6 +229,7 @@ export const getCustomerByEmail = /* GraphQL */ `
       items {
         id
         customerEmail
+        hasLoyaltyCard
         username
         createdAt
         updatedAt
@@ -257,6 +251,7 @@ export const listOrders = /* GraphQL */ `
       items {
         id
         customerEmail
+        hasLoyaltyCard
         status
         createdAt
         total
@@ -265,28 +260,6 @@ export const listOrders = /* GraphQL */ `
         changeRequired
         updatedAt
         items {
-          items {
-            id
-            quantity
-            item {
-              name
-              description
-            }
-            addIns {
-              items {
-                id
-                quantity
-                addIn {
-                  name
-                }
-              }
-            }
-            itemId
-            orderId
-            quantity
-            createdAt
-            updatedAt
-          }
           nextToken
         }
       }
@@ -299,6 +272,7 @@ export const getOrder = /* GraphQL */ `
     getOrder(id: $id) {
       id
       customerEmail
+      hasLoyaltyCard
       status
       createdAt
       total
@@ -354,6 +328,7 @@ export const ordersByStatusByCreatedAt = /* GraphQL */ `
       items {
         id
         customerEmail
+        hasLoyaltyCard
         status
         createdAt
         total
@@ -397,6 +372,7 @@ export const ordersByStatusByPeriod = /* GraphQL */ `
       items {
         id
         customerEmail
+        hasLoyaltyCard
         status
         createdAt
         total
@@ -449,6 +425,7 @@ export const ordersByCustomerEmail = /* GraphQL */ `
       items {
         id
         customerEmail
+        hasLoyaltyCard
         status
         createdAt
         total
@@ -595,7 +572,17 @@ export const listOrderItems = /* GraphQL */ `
           createdAt
           updatedAt
         }
-
+        order {
+          id
+          customerEmail
+          status
+          createdAt
+          total
+          deliveryPeriod
+          deliveryLocation
+          changeRequired
+          updatedAt
+        }
         addIns {
           nextToken
         }
