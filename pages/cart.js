@@ -17,6 +17,54 @@ const Cart = () => {
   const cart = useCart();
   const { state } = useAmplifyAuth();
 
+  const processOrder = async (values, customerEmail, hasLoyaltyCard) => {
+    const order = await API.graphql({
+      query: createOrder,
+      variables: {
+        input: {
+          customerEmail,
+          status: "created",
+          hasLoyaltyCard,
+          total: cart.total,
+          deliveryPeriod: values.deliveryPeriod,
+          deliveryLocation: values.deliveryLocation,
+          changeRequired: values.changeRequired,
+        },
+      },
+      authMode: "API_KEY",
+    });
+    const orderId = order.data?.createOrder.id;
+
+    cart.cartItems.map(async (i) => {
+      const orderItem = await API.graphql({
+        query: createOrderItem,
+        variables: {
+          input: {
+            itemId: i.id,
+            orderId: orderId,
+            quantity: i.quantity,
+          },
+        },
+        authMode: "API_KEY",
+      });
+
+      i.addIns.map(
+        async (addIn) =>
+          await API.graphql({
+            query: createOrderItemAddIn,
+            variables: {
+              input: {
+                orderItemId: orderItem.data.createOrderItem.id,
+                addInId: addIn.id,
+                quantity: addIn.quantity,
+              },
+            },
+            authMode: "API_KEY",
+          })
+      );
+    });
+  };
+
   return (
     <Layout>
       <div>
@@ -112,7 +160,6 @@ const Cart = () => {
             enableReinitialize
             onSubmit={async (values, actions) => {
               const customerEmail = state.user.attributes.email;
-              let loyaltyCard = false;
 
               if (values.exactBool === "false") {
                 values.changeRequired = values.payAmount - cart.total;
@@ -127,69 +174,29 @@ const Cart = () => {
                   authMode: "API_KEY",
                 });
 
-                if (customer.data.getCustomerByEmail.items == 0) {
+                if (customer.data.getCustomerByEmail.items.length == 0) {
                   const createdCustomer = await API.graphql({
                     query: createCustomer,
                     variables: {
                       input: {
                         customerEmail,
-                        hasLoyaltyCard: loyaltyCard,
+                        hasLoyaltyCard: false,
                       },
                     },
                     authMode: "API_KEY",
                   });
+                  processOrder(values, customerEmail, false);
                 }
 
-                if (customer.data.getCustomerByEmail.items[0].hasLoyaltyCard) {
+                if (
+                  customer.data.getCustomerByEmail.items.length > 0 &&
+                  customer.data.getCustomerByEmail.items[0].hasLoyaltyCard
+                ) {
                   console.log(customer);
-                  loyaltyCard = true;
+                  processOrder(values, customerEmail, true);
+                } else {
+                  processOrder(values, customerEmail, false);
                 }
-
-                const order = await API.graphql({
-                  query: createOrder,
-                  variables: {
-                    input: {
-                      customerEmail,
-                      status: "created",
-                      hasLoyaltyCard: loyaltyCard,
-                      total: cart.total,
-                      deliveryPeriod: values.deliveryPeriod,
-                      deliveryLocation: values.deliveryLocation,
-                      changeRequired: values.changeRequired,
-                    },
-                  },
-                  authMode: "API_KEY",
-                });
-                const orderId = order.data?.createOrder.id;
-
-                cart.cartItems.map(async (i) => {
-                  const orderItem = await API.graphql({
-                    query: createOrderItem,
-                    variables: {
-                      input: {
-                        itemId: i.id,
-                        orderId: orderId,
-                        quantity: i.quantity,
-                      },
-                    },
-                    authMode: "API_KEY",
-                  });
-
-                  i.addIns.map(
-                    async (addIn) =>
-                      await API.graphql({
-                        query: createOrderItemAddIn,
-                        variables: {
-                          input: {
-                            orderItemId: orderItem.data.createOrderItem.id,
-                            addInId: addIn.id,
-                            quantity: addIn.quantity,
-                          },
-                        },
-                        authMode: "API_KEY",
-                      })
-                  );
-                });
               } catch (err) {
                 console.log(err);
               }
