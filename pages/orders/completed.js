@@ -125,6 +125,7 @@ const CompletedOrders = () => {
       graphqlOperation(ordersByStatusByPeriod, {
         status: "Completed",
         sortDirection: "ASC",
+        limit: 3000,
       })
     );
     if (errors) {

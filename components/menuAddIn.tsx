@@ -56,7 +56,7 @@ const MenuAddIn = ({
         {!isInItem(itemId, addInId) && (
           <div className="py-1">
             <button
-              className="px-2 py-1 rounded-full h-12 w-12 flex justify-center items-center border-4 border-blue-600 hover:bg-blue-600 hover:border-blue-600 hover:text-white text-blue-600"
+              className="disabled:opacity-50 px-2 py-1 rounded-full h-12 w-12 flex justify-center items-center border-4 border-blue-600 hover:bg-blue-600 hover:border-blue-600 hover:text-white text-blue-600"
               onClick={() =>
                 cart.addAddIn({
                   itemId,
