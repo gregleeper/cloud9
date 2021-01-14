@@ -14,7 +14,7 @@ const Menu = ({ items, addIns, categories }) => {
   const [menuCategories, setMenuCategories] = useState();
   const [menuAddIns, setMenuAddIns] = useState();
   const [filterBy, setFilterBy] = useState([]);
-
+  console.log(items.data.listItems.items);
   const cart = useCart();
 
   const handleFilterChange = (checked, id) => {
@@ -29,9 +29,12 @@ const Menu = ({ items, addIns, categories }) => {
   };
 
   useEffect(() => {
+    let myAvailableItems = items.data.listItems.items.filter(
+      (item) => item.isAvailable === "True"
+    );
     if (filterBy.length > 0) {
       let myItems = [];
-      const originalItemList = items.data.listItems.items;
+      const originalItemList = myAvailableItems;
       originalItemList.map((item) => {
         filterBy.forEach((element) => {
           if (item.categoryId === element) {
@@ -42,7 +45,7 @@ const Menu = ({ items, addIns, categories }) => {
       });
     }
     if (filterBy.length === 0) {
-      const sortedItems = items.data.listItems.items.sort(compare);
+      const sortedItems = myAvailableItems.sort(compare);
       setMenuItems(sortedItems);
     }
   }, [filterBy]);
@@ -149,6 +152,7 @@ export async function getStaticProps({ preview = null }) {
     (await API.graphql({
       query: listItems,
       authMode: "API_KEY",
+      variables: { isAvailable: { eq: "True" } },
     })) || [];
 
   const addIns =
