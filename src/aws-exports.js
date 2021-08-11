@@ -16,8 +16,8 @@ const awsmobile = {
             "profile",
             "aws.cognito.signin.user.admin"
         ],
-        "redirectSignIn": "https://cloud9-chi.vercel.app/,https://cloud9-chi.vercel.app/,https://cloud9-chi.vercel.app/,http://localhost:3000/",
-        "redirectSignOut": "http://localhost:3000/,https://cloud9-chi.vercel.app/,https://cloud9-chi.vercel.app/",
+        "redirectSignIn": "https://cloud9-chi.vercel.app/",
+        "redirectSignOut": "https://cloud9-chi.vercel.app/",
         "responseType": "code"
     },
     "federationTarget": "COGNITO_USER_POOLS",
