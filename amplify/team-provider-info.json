@@ -13,9 +13,7 @@
     },
     "categories": {
       "auth": {
-        "cloud92b47e226": {
-          "hostedUIProviderCreds": "[{\"ProviderName\":\"Google\",\"client_id\":\"717611813944-7h4ml2um31folu9q2lev4ckjk4rqremd.apps.googleusercontent.com\",\"client_secret\":\"Djf8RgywugcQ2rI9UbraPokM\"}]"
-        }
+        "cloud92b47e226": {}
       }
     }
   }
