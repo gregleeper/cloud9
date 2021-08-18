@@ -21,6 +21,9 @@ const Customers = () => {
       },
     } = await API.graphql({
       query: listCustomers,
+      variables: {
+        limit: 1000,
+      },
     });
     setCustomers(allCustomers);
   };
