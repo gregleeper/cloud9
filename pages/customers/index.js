@@ -2,6 +2,7 @@ import Layout from "../../components/layout";
 import { API } from "aws-amplify";
 import { useEffect, useState, useMemo } from "react";
 import { listCustomers } from "../../src/graphql/queries";
+import { updateCustomer } from "../../src/graphql/mutations";
 import Table from "../../components/table";
 import Link from "next/link";
 import { FaBinoculars } from "react-icons/fa";
@@ -50,12 +51,17 @@ const Customers = () => {
     []
   );
 
+  function resetLoyaltyCards() {
+    customers.map((c) => console.log(c));
+  }
+
   return (
     <Layout>
       <div>
         <div className="text-3xl font-display text-gray-800 p-12 text-center">
           <h3>Customers</h3>
         </div>
+        <button onClick={() => resetLoyaltyCards()}>Button</button>
         <div className=" max-w-6xl mx-auto">
           <Table data={customers} columns={columns} />
         </div>
