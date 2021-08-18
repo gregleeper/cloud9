@@ -54,15 +54,15 @@ const Customers = () => {
     []
   );
 
-  function resetLoyaltyCards() {
-    customers.map(
-      async (c) =>
-        await API.graphql({
-          query: updateCustomer,
-          variables: { input: { id: c.id, hasLoyaltyCard: false } },
-        })
-    );
-  }
+  // function resetLoyaltyCards() {
+  //   customers.map(
+  //     async (c) =>
+  //       await API.graphql({
+  //         query: updateCustomer,
+  //         variables: { input: { id: c.id, hasLoyaltyCard: false } },
+  //       })
+  //   );
+  // }
 
   return (
     <Layout>
@@ -70,7 +70,7 @@ const Customers = () => {
         <div className="text-3xl font-display text-gray-800 p-12 text-center">
           <h3>Customers</h3>
         </div>
-        <button onClick={() => resetLoyaltyCards()}>Button</button>
+        {/* <button onClick={() => resetLoyaltyCards()}>Button</button> */}
         <div className=" max-w-6xl mx-auto">
           <Table data={customers} columns={columns} />
         </div>
