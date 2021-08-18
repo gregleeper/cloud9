@@ -52,7 +52,13 @@ const Customers = () => {
   );
 
   function resetLoyaltyCards() {
-    customers.map((c) => console.log(c));
+    customers.map(
+      async (c) =>
+        await API.graphql({
+          query: updateCustomer,
+          variables: { input: { id: c.id, hasLoyaltyCard: false } },
+        })
+    );
   }
 
   return (
