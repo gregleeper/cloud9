@@ -218,6 +218,9 @@ const Cart = () => {
                     <option value={3}>3rd Period</option>
                     <option value={4}>4th Period</option>
                     <option value={5}>5th Period</option>
+                    <option value={6}>6th Period</option>
+                    <option value={7}>7th Period</option>
+                    <option value={8}>8th Period</option>
                   </Field>
                   {errors.deliveryPeriod && touched.deliveryPeriod ? (
                     <div className="text-red-700 ml-4">
