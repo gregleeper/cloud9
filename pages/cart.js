@@ -2,6 +2,7 @@ import Layout from "../components/layout";
 import { useCart } from "../pages/_app";
 import useAmplifyAuth from "../lib/useAmplifyAuth";
 import { formatMoney } from "../utils";
+import { useRouter } from "next/router";
 import {
   createOrder,
   createOrderItem,
@@ -17,6 +18,9 @@ import { useEffect, useState } from "react";
 const Cart = () => {
   const cart = useCart();
   const [customer, setCustomer] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [orderId, setOrderId] = useState("");
+  const router = useRouter();
   const { state } = useAmplifyAuth();
 
   async function createNewCustomer() {
@@ -53,7 +57,6 @@ const Cart = () => {
     }
   }, [state]);
 
-  console.log(customer);
   const processOrder = async (values) => {
     const order = await API.graphql({
       query: createOrder,
@@ -100,6 +103,7 @@ const Cart = () => {
           })
       );
     });
+    setOrderId(orderId);
   };
 
   return (
@@ -196,15 +200,15 @@ const Cart = () => {
             validationSchema={orderSchema}
             enableReinitialize
             onSubmit={async (values, actions) => {
-              const customerEmail = state.user.attributes.email;
-
               if (values.payAmount >= cart.total) {
                 values.changeRequired = values.payAmount - cart.total;
               }
 
               try {
-                processOrder(values);
-
+                await processOrder(values);
+                cart.clearCart();
+                actions.resetForm({});
+                router.push(`/orders/${orderId}`);
                 // if (
                 //   customer.data.getCustomerByEmail.items.length > 0 &&
                 //   customer.data.getCustomerByEmail.items[0].hasLoyaltyCard
@@ -217,8 +221,6 @@ const Cart = () => {
               } catch (err) {
                 console.log(err);
               }
-              cart.clearCart();
-              actions.resetForm({});
             }}
           >
             {({ isSubmitting, errors, touched, values }) => (
