@@ -18,6 +18,12 @@ const Order = ({ order, handleUpdateOrderStatus }) => {
       case 6:
         return "6th Period";
         break;
+      case 7:
+        return "7th Period";
+        break;
+      case 8:
+        return "8th Period";
+        break;
       default:
         return "";
     }

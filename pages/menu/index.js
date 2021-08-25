@@ -14,7 +14,6 @@ const Menu = ({ items, addIns, categories }) => {
   const [menuCategories, setMenuCategories] = useState();
   const [menuAddIns, setMenuAddIns] = useState();
   const [filterBy, setFilterBy] = useState([]);
-  console.log(items.data.listItems.items);
   const cart = useCart();
 
   const handleFilterChange = (checked, id) => {
@@ -52,7 +51,6 @@ const Menu = ({ items, addIns, categories }) => {
 
   const isBeverage = (itemId) => {
     const isBeverageItem = menuItems.filter((i) => i.id === itemId);
-    console.log(isBeverageItem);
     return (
       isBeverageItem[0].category.name.toLowerCase().includes("beverage") &&
       !isBeverageItem[0].name.toLowerCase().includes("water")

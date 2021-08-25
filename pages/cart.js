@@ -12,19 +12,56 @@ import { getCustomerByEmail } from "../src/graphql/queries";
 import { API } from "aws-amplify";
 import { Formik, Field, Form } from "formik";
 import { orderSchema } from "../lib/orderSchema";
+import { useEffect, useState } from "react";
 
 const Cart = () => {
   const cart = useCart();
+  const [customer, setCustomer] = useState({});
   const { state } = useAmplifyAuth();
 
-  const processOrder = async (values, customerEmail, hasLoyaltyCard) => {
+  async function createNewCustomer() {
+    await API.graphql({
+      query: createCustomer,
+      variables: {
+        input: {
+          customerEmail: state.user.attributes.email,
+          hasLoyaltyCard: false,
+        },
+      },
+      authMode: "API_KEY",
+    });
+  }
+
+  async function getCustomer() {
+    const user = await API.graphql({
+      query: getCustomerByEmail,
+      variables: {
+        customerEmail: state.user.attributes.email,
+      },
+      authMode: "API_KEY",
+    });
+    if (user.data.getCustomerByEmail.items.length > 0) {
+      setCustomer(user.data.getCustomerByEmail.items[0]);
+    } else {
+      createNewCustomer();
+    }
+  }
+
+  useEffect(() => {
+    if (state.user) {
+      getCustomer();
+    }
+  }, [state]);
+
+  console.log(customer);
+  const processOrder = async (values) => {
     const order = await API.graphql({
       query: createOrder,
       variables: {
         input: {
-          customerEmail,
+          customerEmail: customer.customerEmail,
           status: "created",
-          hasLoyaltyCard,
+          hasLoyaltyCard: customer.hasLoyaltyCard,
           total: cart.total,
           deliveryPeriod: values.deliveryPeriod,
           deliveryLocation: values.deliveryLocation,
@@ -153,7 +190,7 @@ const Cart = () => {
             initialValues={{
               deliveryPeriod: "",
               deliveryLocation: "",
-              exactBool: "",
+              payAmount: 0,
               changeRequired: 0,
             }}
             validationSchema={orderSchema}
@@ -161,42 +198,22 @@ const Cart = () => {
             onSubmit={async (values, actions) => {
               const customerEmail = state.user.attributes.email;
 
-              if (values.exactBool === "false") {
+              if (values.payAmount >= cart.total) {
                 values.changeRequired = values.payAmount - cart.total;
               }
 
               try {
-                const customer = await API.graphql({
-                  query: getCustomerByEmail,
-                  variables: {
-                    customerEmail,
-                  },
-                  authMode: "API_KEY",
-                });
+                processOrder(values);
 
-                if (customer.data.getCustomerByEmail.items.length == 0) {
-                  const createdCustomer = await API.graphql({
-                    query: createCustomer,
-                    variables: {
-                      input: {
-                        customerEmail,
-                        hasLoyaltyCard: false,
-                      },
-                    },
-                    authMode: "API_KEY",
-                  });
-                  processOrder(values, customerEmail, false);
-                }
-
-                if (
-                  customer.data.getCustomerByEmail.items.length > 0 &&
-                  customer.data.getCustomerByEmail.items[0].hasLoyaltyCard
-                ) {
-                  console.log(customer);
-                  processOrder(values, customerEmail, true);
-                } else {
-                  processOrder(values, customerEmail, false);
-                }
+                // if (
+                //   customer.data.getCustomerByEmail.items.length > 0 &&
+                //   customer.data.getCustomerByEmail.items[0].hasLoyaltyCard
+                // ) {
+                //   console.log(customer);
+                //   processOrder(values, customerEmail, true);
+                // } else {
+                //   processOrder(values, customerEmail, false);
+                // }
               } catch (err) {
                 console.log(err);
               }
@@ -206,10 +223,12 @@ const Cart = () => {
           >
             {({ isSubmitting, errors, touched, values }) => (
               <Form>
-                <div className="flex justify-between lg:w-8/12 w-full py-2">
-                  <label htmlFor="deliveryPeriod">Delivery Period</label>
+                <div className="grid grid-cols-6  py-2 md:w-8/12">
+                  <label className="sm:mr-2" htmlFor="deliveryPeriod">
+                    Delivery Period
+                  </label>
                   <Field
-                    className="form-select w-full ml-4"
+                    className="form-select w-full mr-4 col-span-4 md:mx-4 md:col-start-3 col-start-2 md:col-span-3"
                     name="deliveryPeriod"
                     as="select"
                   >
@@ -223,83 +242,50 @@ const Cart = () => {
                     <option value={8}>8th Period</option>
                   </Field>
                   {errors.deliveryPeriod && touched.deliveryPeriod ? (
-                    <div className="text-red-700 ml-4">
+                    <div className="text-red-700 ml-4 flex justify-center items-center">
                       {errors.deliveryPeriod}
                     </div>
                   ) : null}
                 </div>
-                <div className="flex justify-between lg:w-8/12 w-full py-2">
-                  <label>Delivery Location</label>
+                <div className="grid grid-cols-6 py-2 md:w-8/12 ">
+                  <label className="sm:mr-2">Delivery Location</label>
                   <Field
-                    className="form-input w-full ml-4"
+                    className="form-input w-full col-span-4 md:mx-4 md:col-start-3 col-start-2 md:col-span-3"
                     name="deliveryLocation"
                   />
                   {errors.deliveryLocation && touched.deliveryLocation ? (
-                    <div className="text-red-700 ml-4">
+                    <div className="text-red-700 ml-4 flex justify-center items-center ">
                       {errors.deliveryLocation}
                     </div>
                   ) : null}
                 </div>
-                <div
-                  className="flex justify-between lg:w-8/12 w-full py-2"
-                  id="exact-change-group"
-                >
-                  Do you have exact change?
-                  <div
-                    className="flex justify-around items-center w-1/2"
-                    role="group"
-                    aria-labelledby="exact-change-group"
-                  >
-                    <div>
-                      <label className="mr-2">Yes</label>
-                      <Field
-                        className="form-radio"
-                        name="exactBool"
-                        type="radio"
-                        value="True"
-                      />
+                <div className="grid grid-cols-6 py-2 md:w-8/12">
+                  <label className="sm:mr-2">Amount Paid - $</label>
+                  <Field
+                    className="form-input w-full md:mx-4 md:col-start-3 col-start-2 col-span-4 md:col-span-3"
+                    name="payAmount"
+                    type="number"
+                  />
+                  {errors.payAmount && touched.payAmount ? (
+                    <div className="text-red-700 ml-4 flex justify-center items-center">
+                      {errors.payAmount}
                     </div>
-                    <div>
-                      <label className="mr-2">No</label>
-                      <Field
-                        className="form-radio"
-                        name="exactBool"
-                        type="radio"
-                        value="false"
-                      />
-                    </div>
-                    {errors.exactBool && touched.exactBool ? (
-                      <div className="text-red-700 ml-4">
-                        {errors.exactBool}
-                      </div>
-                    ) : null}
-                  </div>
+                  ) : null}
                 </div>
-                {values.exactBool === "false" && (
-                  <div className="flex justify-between lg:w-8/12 w-full py-2">
-                    <label>
-                      Please input dollar amount you're paying with:
-                    </label>
-                    {/* <Field
-                      className="form-input w-full"
-                      name="payAmount"
-                      type="number"
-                      as="input"
-                    /> */}
-                    <p className="px-2 py-6 bg-red-200 text-gray-900 text-lg">
-                      We do not have change at the moment. You will not be able
-                      to complete an order without having exact change.
-                    </p>
-                  </div>
-                )}
 
                 <button
-                  className="btn-submit mt-4"
+                  className="btn-submit mt-4 md:mx-auto"
                   disabled={
+                    (errors && errors.deliveryLocation) ||
+                    (errors && errors.deliveryPeriod) ||
+                    (touched && !touched.deliveryPeriod) ||
+                    !touched.deliveryLocation ||
+                    !touched.payAmount ||
                     !state.user ||
                     cart.cartItems.length === 0 ||
                     isSubmitting ||
-                    values.exactBool === "false"
+                    (values.payAmount - cart.total < 0 &&
+                      !customer.hasLoyaltyCard)
                   }
                   type="submit"
                 >
