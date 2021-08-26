@@ -209,7 +209,7 @@ const Cart = () => {
                 cart.clearCart();
                 actions.resetForm({});
 
-                router.push(`/my-orderes`);
+                router.push(`/my-orders`);
 
                 // if (
                 //   customer.data.getCustomerByEmail.items.length > 0 &&
