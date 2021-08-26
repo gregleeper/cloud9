@@ -208,7 +208,9 @@ const Cart = () => {
                 await processOrder(values);
                 cart.clearCart();
                 actions.resetForm({});
-                router.push(`/orders/${orderId}`);
+
+                router.push(`/my-orderes`);
+
                 // if (
                 //   customer.data.getCustomerByEmail.items.length > 0 &&
                 //   customer.data.getCustomerByEmail.items[0].hasLoyaltyCard
