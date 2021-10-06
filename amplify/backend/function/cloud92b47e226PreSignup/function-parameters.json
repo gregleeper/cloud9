@@ -1,0 +1,18 @@
+{
+  "trigger": true,
+  "modules": [
+    "email-filter-allowlist-legacy"
+  ],
+  "parentResource": "cloud92b47e226",
+  "functionName": "cloud92b47e226PreSignup",
+  "resourceName": "cloud92b47e226PreSignup",
+  "parentStack": "auth",
+  "triggerEnvs": "[]",
+  "triggerDir": "/usr/local/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/provider-utils/awscloudformation/triggers/PreSignup",
+  "triggerTemplate": "PreSignup.json.ejs",
+  "triggerEventPath": "PreSignup.event.json",
+  "roleName": "cloud92b47e226PreSignup",
+  "skipEdit": true,
+  "DOMAINWHITELIST": "usd210.org",
+  "enableCors": false
+}

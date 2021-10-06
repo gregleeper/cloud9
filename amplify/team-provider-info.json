@@ -12,8 +12,15 @@
       "AmplifyAppId": "d2oopwt3vvsv6q"
     },
     "categories": {
+      "function": {
+        "cloud92b47e226PreSignup": {
+          "DOMAINWHITELIST": "usd210.org",
+          "deploymentBucketName": "amplify-cloud9-dev-101155-deployment",
+          "s3Key": "amplify-builds/cloud92b47e226PreSignup-68516f53786754726e76-build.zip"
+        }
+      },
       "auth": {
-        "cloud92b47e226": {}
+        "cloud929c669b2": {}
       }
     }
   }
