@@ -121,13 +121,14 @@ const CompletedOrders = () => {
   console.log(beginDate);
 
   const getCompletedOrders = async () => {
-    const { data, loading, errors } = await API.graphql(
-      graphqlOperation(ordersByStatusByPeriod, {
+    const { data, loading, errors } = await API.graphql({
+      query: ordersByStatusByPeriod,
+      variables: {
         status: "Completed",
         sortDirection: "ASC",
-        limit: 3000,
-      })
-    );
+      },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
     if (errors) {
       console.log(errors);
     }
@@ -152,8 +153,9 @@ const CompletedOrders = () => {
   };
 
   const getCompletedOrdersByDateRange = async () => {
-    const { data, loading, errors } = await API.graphql(
-      graphqlOperation(ordersByStatusByPeriod, {
+    const { data, loading, errors } = await API.graphql({
+      query: ordersByStatusByPeriod,
+      variables: {
         status: "Completed",
         sortDirection: "ASC",
         filter: {
@@ -161,8 +163,9 @@ const CompletedOrders = () => {
             between: [beginDate, endDate],
           },
         },
-      })
-    );
+      },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
     if (errors) {
       console.log(errors);
     }
@@ -246,13 +249,13 @@ export async function getServerSideProps(context) {
     let isManager = false;
     let isStaff = false;
     const { signInUserSession } = await ssr.Auth.currentAuthenticatedUser();
-    isManager = signInUserSession.accessToken.payload[
-      "cognito:groups"
-    ].includes("Managers");
+    isManager =
+      signInUserSession.accessToken.payload["cognito:groups"].includes(
+        "Managers"
+      );
 
-    isStaff = signInUserSession.accessToken.payload["cognito:groups"].includes(
-      "Staff"
-    );
+    isStaff =
+      signInUserSession.accessToken.payload["cognito:groups"].includes("Staff");
     if (isManager || isStaff) {
       return {
         props: {
