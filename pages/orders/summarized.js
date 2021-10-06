@@ -18,6 +18,7 @@ const CompletedOrders = () => {
     let totals = [];
 
     items.map((item) => {
+      
       const quantitySoldPerItem = item.orders.items.reduce(
         (acc, order) => acc + order.quantity,
         0
@@ -88,13 +89,21 @@ const CompletedOrders = () => {
   }, [orders]);
 
   const getOrders = async () => {
-    const { data, loading, errors } = await API.graphql(
-      graphqlOperation(listOrderItems)
-    );
-    if (data) {
-      setOrders(data.listOrderItems.items);
+    try {
+      const { data, loading, errors } = await API.graphql(
+        graphqlOperation(listOrderItems)
+      );
+      if (data) {
+        console.log(data);
+        setOrders(data.listOrderItems.items);
+      }
+    } catch (err) {
+      setOrders(err.data.listOrderItems.items);
+      console.log(err);
     }
   };
+
+  console.log({ orders });
 
   const getItems = async () => {
     const { data, loading, errors } = await API.graphql(
@@ -131,13 +140,13 @@ export async function getServerSideProps(context) {
     let isManager = false;
     let isStaff = false;
     const { signInUserSession } = await ssr.Auth.currentAuthenticatedUser();
-    isManager = signInUserSession.accessToken.payload[
-      "cognito:groups"
-    ].includes("Managers");
+    isManager =
+      signInUserSession.accessToken.payload["cognito:groups"].includes(
+        "Managers"
+      );
 
-    isStaff = signInUserSession.accessToken.payload["cognito:groups"].includes(
-      "Staff"
-    );
+    isStaff =
+      signInUserSession.accessToken.payload["cognito:groups"].includes("Staff");
     if (isManager || isStaff) {
       return {
         props: {

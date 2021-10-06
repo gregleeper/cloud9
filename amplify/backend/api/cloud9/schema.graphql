@@ -102,19 +102,15 @@ type Customer
 
 type Order
   @model
-  @auth(
-    rules: [{ allow: public }, { allow: groups, groups: ["Managers", "Staff"] }]
-  )
   # @auth(
-  #   rules: [
-  #     {
-  #       allow: groups
-  #       groups: ["Mangers"]
-  #       operations: [create, update, delete, read]
-  #     }
-  #     { allow: groups, groups: ["Staff"], operations: [read, create, update] }
-  #   ]
+  #   rules: [{ allow: public }, { allow: groups, groups: ["Managers", "Staff"] }]
   # )
+  @auth(
+    rules: [
+      { allow: groups, groups: ["Mangers"] }
+      { allow: public, operations: [read, create] }
+    ]
+  )
   @key(
     name: "ordersByStatus"
     fields: ["status", "createdAt"]
@@ -145,8 +141,14 @@ type Order
 
 type OrderItemAddIn
   @model
+  # @auth(
+  #   rules: [{ allow: public }, { allow: groups, groups: ["Managers", "Staff"] }]
+  # )
   @auth(
-    rules: [{ allow: public }, { allow: groups, groups: ["Managers", "Staff"] }]
+    rules: [
+      { allow: groups, groups: ["Mangers"] }
+      { allow: public, operations: [read, create] }
+    ]
   )
   @key(name: "byOrderItem", fields: ["orderItemId", "addInId"])
   @key(name: "byAddIn", fields: ["addInId", "orderItemId"]) {
@@ -160,22 +162,14 @@ type OrderItemAddIn
 
 type OrderItem
   @model
-  @auth(
-    rules: [{ allow: public }, { allow: groups, groups: ["Managers", "Staff"] }]
-  )
   @key(name: "byItem", fields: ["itemId", "orderId"])
-  @key(name: "byOrder", fields: ["orderId", "itemId"]) {
-  # @auth(
-  #   rules: [
-  #     {
-  #       allow: groups
-  #       groups: ["Mangers"]
-  #       operations: [create, update, delete, read]
-  #     }
-  #     { allow: groups, groups: ["Staff"], operations: [read, create, update] }
-  #     { allow: public, operations: [read] }
-  #   ]
-  # )
+  @key(name: "byOrder", fields: ["orderId", "itemId"])
+  @auth(
+    rules: [
+      { allow: groups, groups: ["Mangers"] }
+      { allow: public, operations: [read, create] }
+    ]
+  ) {
   id: ID!
   itemId: ID!
   orderId: ID!

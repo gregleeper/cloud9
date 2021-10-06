@@ -21,6 +21,9 @@ export const listItems = /* GraphQL */ `
           updatedAt
         }
         orders {
+          items {
+            id
+          }
           nextToken
         }
       }
