@@ -129,7 +129,7 @@ type OrderItemAddIn
   # @auth(
   #   rules: [{ allow: public }, ]
   # )
-  @auth(rules: [{ allow: public }])
+  @auth(rules: [{ allow: public }, { allow: groups, groups: ["Managers"] }])
   @key(name: "byOrderItem", fields: ["orderItemId", "addInId"])
   @key(name: "byAddIn", fields: ["addInId", "orderItemId"]) {
   id: ID!
@@ -144,7 +144,7 @@ type OrderItem
   @model
   @key(name: "byItem", fields: ["itemId", "orderId"])
   @key(name: "byOrder", fields: ["orderId", "itemId"])
-  @auth(rules: [{ allow: public }]) {
+  @auth(rules: [{ allow: public }, { allow: groups, groups: ["Managers"] }]) {
   id: ID!
   itemId: ID!
   orderId: ID!

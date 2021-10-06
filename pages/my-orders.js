@@ -14,12 +14,14 @@ const MyOrders = () => {
   const auth = useAmplifyAuth();
 
   const getCustomerOrders = async (userEmail) => {
-    const myOrders = await API.graphql(
-      graphqlOperation(ordersByCustomerEmail, {
+    const myOrders = await API.graphql({
+      query: ordersByCustomerEmail,
+      variables: {
         customerEmail: userEmail,
-        sortDirection: "ASC",
-      })
-    );
+        sortDirection: "DESC",
+      },
+      authMode: "API_KEY",
+    });
     setCustomerOrders(myOrders.data.ordersByCustomerEmail.items);
   };
 

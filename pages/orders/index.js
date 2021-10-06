@@ -47,78 +47,87 @@ const Orders = ({ authenticated, isManager, isStaff }) => {
 
   const getNewOrders = async () => {
     try {
-      const { data, loading, errors } = await API.graphql(
-        graphqlOperation(ordersByStatusByPeriod, {
-          status: "created",
-          sortDirection: "ASC",
-        })
-      );
+      const { data, loading, errors } = await API.graphql({
+        query: ordersByStatusByPeriod,
+        variables: { status: "created", sortDirection: "ASC" },
+        authMode: "API_KEY",
+      });
+      console.log({ data });
       setOrders(data.ordersByStatusByPeriod.items);
     } catch (errors) {
-      console.log(errors);
+      // console.log(errors);
     }
   };
 
   const getFilteredOrders = async (period) => {
-    const { data, loading, errors } = await API.graphql(
-      graphqlOperation(ordersByStatusByPeriod, {
-        status: "created",
-        sortDirection: "ASC",
-        filter: {
-          deliveryPeriod: {
-            eq: period,
+    try {
+      const { data, loading, errors } = await API.graphql({
+        query: ordersByStatusByPeriod,
+        variables: {
+          status: "created",
+          sortDirection: "ASC",
+          filter: {
+            deliveryPeriod: {
+              eq: period,
+            },
           },
         },
-      })
-    );
-    if (errors) {
-      console.log(errors);
-    }
-    if (data) {
+        authMode: "API_KEY",
+      });
+
       setOrders(data.ordersByStatusByPeriod.items);
+    } catch (err) {
+      // console.log(err);
     }
   };
 
   const getOrdersInFullfillment = async () => {
     try {
-      const { data, loading, error } = await API.graphql(
-        graphqlOperation(ordersByStatusByPeriod, {
+      const { data, loading, error } = await API.graphql({
+        query: ordersByStatusByPeriod,
+        variables: {
           status: "In-Fullfillment",
           sortDirection: "ASC",
-        })
-      );
-      console.log(error);
+        },
+        authMode: "API_KEY",
+      });
+
       setOrdersInFullfillment(data.ordersByStatusByPeriod.items);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
   const getFilteredOrdersInFullfillment = async (period) => {
-    const { data, loading, error } = await API.graphql(
-      graphqlOperation(ordersByStatusByPeriod, {
-        status: "In-Fullfillment",
-        sortDirection: "ASC",
-        filter: { deliveryPeriod: { eq: period } },
-      })
-    );
-
-    if (data) {
+    try {
+      const { data, loading, error } = await API.graphql({
+        query: ordersByStatusByPeriod,
+        variables: {
+          status: "In-Fullfillment",
+          sortDirection: "ASC",
+          filter: { deliveryPeriod: { eq: period } },
+        },
+        authMode: "API_KEY",
+      });
       setOrdersInFullfillment(data.ordersByStatusByPeriod.items);
+    } catch (err) {
+      // console.log(err);
     }
   };
 
   const updateOrderStatus = async (orderId, status) => {
-    console.log(orderId, status);
+    // console.log(orderId, status);
     await API.graphql({
       query: updateOrder,
       variables: { input: { id: orderId, status } },
+      authMode: "API_KEY",
     });
   };
 
   const orderStream = () =>
     API.graphql({
       query: onCreateOrderItem,
+      authMode: "API_KEY",
     }).subscribe({
       next: () => {
         getNewOrders();
@@ -128,6 +137,7 @@ const Orders = ({ authenticated, isManager, isStaff }) => {
   const orderUpdateStream = () => {
     API.graphql({
       query: onUpdateOrder,
+      authMode: "API_KEY",
     }).subscribe({
       next: () => {
         getNewOrders();
@@ -259,6 +269,7 @@ export async function getServerSideProps(context) {
     let isManager = false;
     let isStaff = false;
     const { signInUserSession } = await ssr.Auth.currentAuthenticatedUser();
+
     isManager =
       signInUserSession.accessToken.payload["cognito:groups"].includes(
         "Managers"
