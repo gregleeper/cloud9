@@ -18,10 +18,8 @@ import Order from "../../components/order";
 const Orders = ({ authenticated, isManager, isStaff }) => {
   const [orders, setOrders] = useState();
   const [ordersInFullfillment, setOrdersInFullfillment] = useState();
-  const [
-    selectedPeriodForCreatedOrders,
-    setSelectedPeriodForCreatedOrders,
-  ] = useState(0);
+  const [selectedPeriodForCreatedOrders, setSelectedPeriodForCreatedOrders] =
+    useState(0);
   const [
     selectedPeriodForFullfillmentOrders,
     setSelectedPeriodForFullfillmentOrders,
@@ -115,14 +113,12 @@ const Orders = ({ authenticated, isManager, isStaff }) => {
     await API.graphql({
       query: updateOrder,
       variables: { input: { id: orderId, status } },
-      authMode: "API_KEY",
     });
   };
 
   const orderStream = () =>
     API.graphql({
       query: onCreateOrderItem,
-      authMode: "API_KEY",
     }).subscribe({
       next: () => {
         getNewOrders();
@@ -132,7 +128,6 @@ const Orders = ({ authenticated, isManager, isStaff }) => {
   const orderUpdateStream = () => {
     API.graphql({
       query: onUpdateOrder,
-      authMode: "API_KEY",
     }).subscribe({
       next: () => {
         getNewOrders();
@@ -264,13 +259,13 @@ export async function getServerSideProps(context) {
     let isManager = false;
     let isStaff = false;
     const { signInUserSession } = await ssr.Auth.currentAuthenticatedUser();
-    isManager = signInUserSession.accessToken.payload[
-      "cognito:groups"
-    ].includes("Managers");
+    isManager =
+      signInUserSession.accessToken.payload["cognito:groups"].includes(
+        "Managers"
+      );
 
-    isStaff = signInUserSession.accessToken.payload["cognito:groups"].includes(
-      "Staff"
-    );
+    isStaff =
+      signInUserSession.accessToken.payload["cognito:groups"].includes("Staff");
     if (isManager || isStaff) {
       return {
         props: {

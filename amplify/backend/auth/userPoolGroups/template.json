@@ -1,0 +1,55 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Parameters": {
+        "authcloud92b47e226UserPoolId": {
+            "Type": "String",
+            "Default": "authcloud92b47e226UserPoolId"
+        },
+        
+        "authcloud92b47e226AppClientID": {
+            "Type": "String",
+            "Default": "authcloud92b47e226AppClientID"
+        },
+        "authcloud92b47e226AppClientIDWeb": {
+            "Type": "String",
+            "Default": "authcloud92b47e226AppClientIDWeb"
+        },
+        "AuthRoleArn": {
+            "Type": "String"
+        },
+        "UnauthRoleArn": {
+            "Type": "String"
+        },
+        "env": {
+            "Type": "String"
+        }
+    },
+    "Conditions": {
+        "ShouldNotCreateEnvResources": {
+            "Fn::Equals": [
+                {
+                    "Ref": "env"
+                },
+                "NONE"
+            ]
+        }
+    },
+    "Resources": {
+    
+        "testGroup": {
+          "Type" : "AWS::Cognito::UserPoolGroup",
+          "Properties" : {
+              "GroupName" : "test",
+              "Precedence" : 1,
+              
+              "UserPoolId" : {
+                "Ref": "authcloud92b47e226UserPoolId"
+              }
+            }
+        },
+        
+    
+    
+    },
+    
+}

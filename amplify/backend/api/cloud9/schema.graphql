@@ -105,7 +105,15 @@ type Order
   # @auth(
   #   rules: [{ allow: public }, { allow: groups, groups: ["Managers", "Staff"] }]
   # )
-  @auth(rules: [{ allow: public }])
+  @auth(
+    rules: [
+      { allow: owner, operations: [create, read] }
+      {
+        allow: groups
+        groups: ["us-east-1_5tCgY1nSD_Google", "Managers", "Staff"]
+      }
+    ]
+  )
   @key(
     name: "ordersByStatus"
     fields: ["status", "createdAt"]
@@ -139,7 +147,15 @@ type OrderItemAddIn
   # @auth(
   #   rules: [{ allow: public }, { allow: groups, groups: ["Managers", "Staff"] }]
   # )
-  @auth(rules: [{ allow: public }])
+  @auth(
+    rules: [
+      { allow: owner, operations: [create, read] }
+      {
+        allow: groups
+        groups: ["us-east-1_5tCgY1nSD_Google", "Managers", "Staff"]
+      }
+    ]
+  )
   @key(name: "byOrderItem", fields: ["orderItemId", "addInId"])
   @key(name: "byAddIn", fields: ["addInId", "orderItemId"]) {
   id: ID!
@@ -154,7 +170,15 @@ type OrderItem
   @model
   @key(name: "byItem", fields: ["itemId", "orderId"])
   @key(name: "byOrder", fields: ["orderId", "itemId"])
-  @auth(rules: [{ allow: public }]) {
+  @auth(
+    rules: [
+      { allow: owner, operations: [create, read] }
+      {
+        allow: groups
+        groups: ["us-east-1_5tCgY1nSD_Google", "Managers", "Staff"]
+      }
+    ]
+  ) {
   id: ID!
   itemId: ID!
   orderId: ID!

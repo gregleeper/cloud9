@@ -1,6 +1,4 @@
 {
-    "identityPoolName": "cloud92b47e226_identitypool_2b47e226",
-    "allowUnauthenticatedIdentities": false,
     "resourceNameTruncated": "cloud92b47e226",
     "userPoolName": "cloud92b47e226_userpool_2b47e226",
     "autoVerifiedAttributes": [
@@ -33,7 +31,7 @@
     "userpoolClientSetAttributes": false,
     "sharedId": "2b47e226",
     "resourceName": "cloud92b47e226",
-    "authSelections": "identityPoolAndUserPool",
+    "authSelections": "userPoolOnly",
     "authRoleArn": {
         "Fn::GetAtt": [
             "AuthRole",
@@ -46,15 +44,20 @@
             "Arn"
         ]
     },
-    "useDefault": "defaultSocial",
-    "hostedUI": true,
-    "hostedUIDomainName": "cloud9-hugoton",
-    "authProvidersUserPool": [
-        "Google"
+    "useDefault": "manual",
+    "hostedUI": false,
+    "userPoolGroupList": [
+        "test"
     ],
-    "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
-    "userPoolGroupList": [],
     "dependsOn": [],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://cloud9-chi.vercel.app/\",\"https://cloud9-chi.vercel.app/\",\"https://cloud9-chi.vercel.app/\",\"http://localhost:3000/\"],\"LogoutURLs\":[\"http://localhost:3000/\",\"https://cloud9-chi.vercel.app/\",\"https://cloud9-chi.vercel.app/\"]}",
-    "serviceName": "Cognito"
+    "serviceName": "Cognito",
+    "userPoolGroups": true,
+    "adminQueries": false,
+    "triggers": "{}",
+    "parentStack": {
+        "Ref": "AWS::StackId"
+    },
+    "breakCircularDependency": false,
+    "permissions": [],
+    "authProviders": []
 }
