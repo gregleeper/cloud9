@@ -127,7 +127,7 @@ const CompletedOrders = () => {
         status: "Completed",
         sortDirection: "ASC",
       },
-      authMode: "AMAZON_COGNITO_USER_POOLS",
+      authMode: "API_KEY",
     });
     if (errors) {
       console.log(errors);
@@ -164,7 +164,7 @@ const CompletedOrders = () => {
           },
         },
       },
-      authMode: "AMAZON_COGNITO_USER_POOLS",
+      authMode: "API_KEY",
     });
     if (errors) {
       console.log(errors);
