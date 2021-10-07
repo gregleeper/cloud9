@@ -126,9 +126,8 @@ const CompletedOrders = () => {
       variables: {
         status: "Completed",
         sortDirection: "ASC",
-        filter: {
-          limit: 3000,
-        },
+
+        limit: 3000,
       },
       authMode: "API_KEY",
     });
@@ -165,8 +164,8 @@ const CompletedOrders = () => {
           createdAt: {
             between: [beginDate, endDate],
           },
-          limit: 3000,
         },
+        limit: 3000,
       },
       authMode: "API_KEY",
     });
