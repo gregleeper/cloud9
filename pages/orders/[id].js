@@ -15,6 +15,9 @@ const Order = () => {
     const order = await API.graphql(
       {
         query: getOrder,
+        variables: {
+          id: orderId
+        },
         authMode: "API_KEY"
       }
     );
