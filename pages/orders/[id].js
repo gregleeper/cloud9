@@ -13,9 +13,10 @@ const Order = () => {
 
   const getOrderDetails = async () => {
     const order = await API.graphql(
-      graphqlOperation(getOrder, {
-        id: orderId,
-      })
+      {
+        query: getOrder,
+        authMode: "API_KEY"
+      }
     );
     setOrder(order.data.getOrder);
   };
