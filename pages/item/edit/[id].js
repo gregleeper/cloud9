@@ -22,7 +22,11 @@ const EditItem = () => {
 
   const getCategories = async () => {
     const { data, loading, error } = await API.graphql(
-      graphqlOperation(listCategorys)
+      {
+        query:  listCategorys, 
+        authMode: "API_KEY"
+      } , 
+     
     );
     if (data) {
       setCategories(data.listCategorys.items);
@@ -34,9 +38,10 @@ const EditItem = () => {
       data: itemData,
       loading: itemLoading,
       error: itemError,
-    } = await API.graphql(graphqlOperation(getItem, { id: itemId }));
+    } = await API.graphql({ query: getItem, variables: { id: itemId }, authMode: "API_KEY"});
     setItem(itemData.getItem);
   };
+  console.log(getItemToEdit)
 
   return (
     <Layout>
@@ -56,7 +61,7 @@ const EditItem = () => {
             enableReinitialize
             onSubmit={async (values, actions) => {
               await API.graphql(
-                graphqlOperation(updateItem, {
+                {query: updateItem, variables: {
                   input: {
                     name: values.name,
                     price: values.price,
@@ -65,7 +70,7 @@ const EditItem = () => {
                     isAvailable: values.isAvailable,
                     id: itemId,
                   },
-                })
+                }, authMode: "API_KEY"}
               );
               fetch(
                 "https://api.vercel.com/v1/integrations/deploy/QmY58qnSQ83vP7HrtRXVbWkKn1HjcJ9XLRsKkSko54jsqV/FkR9L18skN"

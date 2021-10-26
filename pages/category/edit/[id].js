@@ -14,7 +14,7 @@ const EditCategory = () => {
 
   const getCategoryToEdit = async (categoryId) => {
     const { data, loading, error } = await API.graphql(
-      graphqlOperation(getCategory, { id: categoryId })
+      {query: getCategory, variables: { id: categoryId }, authMode: "API_KEY"}
     );
 
     if (data) {

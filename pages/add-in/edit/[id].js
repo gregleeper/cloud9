@@ -23,9 +23,11 @@ const EditItem = () => {
       data: addInData,
       loading: addInLoading,
       error: addInError,
-    } = await API.graphql(graphqlOperation(getAddIn, { id: addInId }));
+    } = await API.graphql({query: getAddIn, variables: { id: addInId }, authMode: "API_KEY"});
     setAddIn(addInData.getAddIn);
   };
+
+  console.log(getItemToEdit)
 
   return (
     <Layout>
@@ -44,7 +46,7 @@ const EditItem = () => {
             enableReinitialize
             onSubmit={async (values, actions) => {
               await API.graphql(
-                graphqlOperation(updateAddIn, {
+                {query: updateAddIn, variables: {
                   input: {
                     name: values.name,
 
@@ -52,7 +54,7 @@ const EditItem = () => {
                     isAvailable: values.isAvailable,
                     id: addInId,
                   },
-                })
+                }, authMode: "API_KEY"}
               );
               fetch(
                 "https://api.vercel.com/v1/integrations/deploy/QmY58qnSQ83vP7HrtRXVbWkKn1HjcJ9XLRsKkSko54jsqV/FkR9L18skN"
