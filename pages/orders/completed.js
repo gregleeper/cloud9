@@ -16,8 +16,8 @@ import moment from "moment";
 
 const CompletedOrders = () => {
   const [completedOrders, setCompletedOrders] = useState([]);
-  const [beginDate, setBeginDate] = useState();
-  const [endDate, setEndDate] = useState();
+  const [beginDate, setBeginDate] = useState(moment().subtract(2, 'months'));
+  const [endDate, setEndDate] = useState(moment());
   const modifiers = { start: beginDate, end: endDate };
 
   const columns = React.useMemo(
@@ -118,7 +118,7 @@ const CompletedOrders = () => {
     setBeginDate();
     setEndDate();
   };
-  console.log(beginDate);
+ 
 
   const getCompletedOrders = async () => {
     const { data, loading, errors } = await API.graphql({
@@ -126,7 +126,11 @@ const CompletedOrders = () => {
       variables: {
         status: "Completed",
         sortDirection: "ASC",
-
+        filter: {
+          createdAt: {
+            between: [beginDate, endDate],
+          },
+        },
         limit: 5000,
       },
       authMode: "API_KEY",
