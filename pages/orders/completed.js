@@ -127,7 +127,7 @@ const CompletedOrders = () => {
         status: "Completed",
         sortDirection: "ASC",
 
-        limit: 3000,
+        limit: 5000,
       },
       authMode: "API_KEY",
     });

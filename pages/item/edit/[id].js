@@ -41,7 +41,7 @@ const EditItem = () => {
     } = await API.graphql({ query: getItem, variables: { id: itemId }, authMode: "API_KEY"});
     setItem(itemData.getItem);
   };
-  console.log(getItemToEdit)
+  
 
   return (
     <Layout>
